@@ -22,6 +22,7 @@ namespace PartWebApp2.Models
     public class Area
     {
         public int Id { get; set; }
+        public AreaType Type { get; set; }
         public List<Party> Parties { get; set; }
     }
 }

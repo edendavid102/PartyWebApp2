@@ -19,6 +19,7 @@ namespace PartWebApp2.Models
         [Display(Name = "Open Doors")]
         public DateTime startTime { get; set;}
         [Display(Name = "Genre")]
+        public int genreId { get; set; }
         public Genre genre { get; set; }
         [Display(Name = "Minimal Age")]
         public int minimalAge { get; set; }
@@ -29,8 +30,8 @@ namespace PartWebApp2.Models
         public int ProducerId { get; set; }
         [Display(Name = "Performers")]
         public List<Performer> performers { get; set; }
+        public int clubId { get; set; }
         [Display(Name = "Club")]
-        //public int clubId { get; set; }
         public Club club { get; set; }
         [Display(Name = "Image")]
         public PartyImage image { get; set; }

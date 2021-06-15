@@ -12,7 +12,8 @@ namespace PartWebApp2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -23,27 +24,27 @@ namespace PartWebApp2.Migrations
                 name: "Club",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    locationID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    LocationId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Club", x => x.id);
+                    table.PrimaryKey("PK_Club", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Genre",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genre", x => x.id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,12 +88,12 @@ namespace PartWebApp2.Migrations
                     price = table.Column<double>(type: "float", nullable: false),
                     eventDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     startTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    genreid = table.Column<int>(type: "int", nullable: true),
+                    genreId = table.Column<int>(type: "int", nullable: false),
                     minimalAge = table.Column<int>(type: "int", nullable: false),
                     areaId = table.Column<int>(type: "int", nullable: false),
                     maxCapacity = table.Column<int>(type: "int", nullable: false),
                     ProducerId = table.Column<int>(type: "int", nullable: false),
-                    clubid = table.Column<int>(type: "int", nullable: true)
+                    clubId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,17 +105,17 @@ namespace PartWebApp2.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Party_Club_clubid",
-                        column: x => x.clubid,
+                        name: "FK_Party_Club_clubId",
+                        column: x => x.clubId,
                         principalTable: "Club",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Party_Genre_genreid",
-                        column: x => x.genreid,
+                        name: "FK_Party_Genre_genreId",
+                        column: x => x.genreId,
                         principalTable: "Genre",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,14 +192,14 @@ namespace PartWebApp2.Migrations
                 column: "areaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Party_clubid",
+                name: "IX_Party_clubId",
                 table: "Party",
-                column: "clubid");
+                column: "clubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Party_genreid",
+                name: "IX_Party_genreId",
                 table: "Party",
-                column: "genreid");
+                column: "genreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartyImage_partyId",

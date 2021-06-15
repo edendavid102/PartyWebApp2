@@ -26,6 +26,9 @@ namespace PartWebApp2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Area");
@@ -33,25 +36,25 @@ namespace PartWebApp2.Migrations
 
             modelBuilder.Entity("PartWebApp2.Models.Club", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("locationID")
+                    b.Property<string>("LocationId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Club");
                 });
 
             modelBuilder.Entity("PartWebApp2.Models.Genre", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -59,7 +62,7 @@ namespace PartWebApp2.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Genre");
                 });
@@ -77,13 +80,13 @@ namespace PartWebApp2.Migrations
                     b.Property<int>("areaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("clubid")
+                    b.Property<int>("clubId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("eventDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("genreid")
+                    b.Property<int>("genreId")
                         .HasColumnType("int");
 
                     b.Property<int>("maxCapacity")
@@ -105,9 +108,9 @@ namespace PartWebApp2.Migrations
 
                     b.HasIndex("areaId");
 
-                    b.HasIndex("clubid");
+                    b.HasIndex("clubId");
 
-                    b.HasIndex("genreid");
+                    b.HasIndex("genreId");
 
                     b.ToTable("Party");
                 });
@@ -221,12 +224,16 @@ namespace PartWebApp2.Migrations
                         .IsRequired();
 
                     b.HasOne("PartWebApp2.Models.Club", "club")
-                        .WithMany()
-                        .HasForeignKey("clubid");
+                        .WithMany("Parties")
+                        .HasForeignKey("clubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PartWebApp2.Models.Genre", "genre")
                         .WithMany("parties")
-                        .HasForeignKey("genreid");
+                        .HasForeignKey("genreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("area");
 
@@ -277,6 +284,11 @@ namespace PartWebApp2.Migrations
                 });
 
             modelBuilder.Entity("PartWebApp2.Models.Area", b =>
+                {
+                    b.Navigation("Parties");
+                });
+
+            modelBuilder.Entity("PartWebApp2.Models.Club", b =>
                 {
                     b.Navigation("Parties");
                 });

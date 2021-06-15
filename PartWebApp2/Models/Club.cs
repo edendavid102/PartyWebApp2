@@ -10,8 +10,10 @@ namespace PartWebApp2.Models
 {
     public  class Club
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string locationID { get; set; }
+        public int Id { get; set; }
+        public string LocationId { get; set; }
+        public string Name { get; set; }
+        public List<Party> Parties { get; set; }
+
     }
 }

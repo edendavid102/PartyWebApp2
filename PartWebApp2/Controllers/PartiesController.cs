@@ -35,7 +35,6 @@ namespace PartWebApp2.Controllers
             }
 
             var party = await _context.Party
-                .Include(p => p.area)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (party == null)
             {
@@ -48,7 +47,9 @@ namespace PartWebApp2.Controllers
         // GET: Parties/Create
         public IActionResult Create()
         {
-            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Id");
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace PartWebApp2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,price,eventDate,startTime,minimalAge,areaId,maxCapacity,ProducerId")] Party party)
+        public async Task<IActionResult> Create([Bind("Id,name,price,eventDate,startTime,minimalAge,areaId,maxCapacity,ProducerId,genreId,clubId")] Party party)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +66,8 @@ namespace PartWebApp2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Id", party.genreId);
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Id", party.clubId);
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Id", party.areaId);
             return View(party);
         }

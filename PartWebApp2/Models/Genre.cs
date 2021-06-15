@@ -22,10 +22,8 @@ namespace PartWebApp2.Models
 
     public class Genre
     {
-        public int id { get; set; }
-
+        public int Id { get; set; }
         public GenreType Type { get; set; }
-
         public List<Party> parties { get; set; }
     }
 
