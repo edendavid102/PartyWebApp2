@@ -47,6 +47,7 @@ namespace PartWebApp2.Controllers
         // GET: Parties/Create
         public IActionResult Create()
         {
+            ViewData["producerId"] = new SelectList(_context.Set<User>(), "Id", "Id");
             ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
@@ -66,6 +67,7 @@ namespace PartWebApp2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["producerId"] = new SelectList(_context.Set<User>(), "Id", "Id");
             ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Id", party.genreId);
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Id", party.clubId);
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Id", party.areaId);

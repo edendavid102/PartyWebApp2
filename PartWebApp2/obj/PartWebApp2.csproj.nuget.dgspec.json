@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\razel\\OneDrive\\Documents\\PartyWebApp2\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj": {}
+    "C:\\Users\\linoy bekker\\Desktop\\PartyPro\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\razel\\OneDrive\\Documents\\PartyWebApp2\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj": {
+    "C:\\Users\\linoy bekker\\Desktop\\PartyPro\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\razel\\OneDrive\\Documents\\PartyWebApp2\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj",
+        "projectUniqueName": "C:\\Users\\linoy bekker\\Desktop\\PartyPro\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj",
         "projectName": "PartWebApp2",
-        "projectPath": "C:\\Users\\razel\\OneDrive\\Documents\\PartyWebApp2\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj",
-        "packagesPath": "C:\\Users\\razel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\razel\\OneDrive\\Documents\\PartyWebApp2\\PartyWebApp2\\PartWebApp2\\obj\\",
+        "projectPath": "C:\\Users\\linoy bekker\\Desktop\\PartyPro\\PartyWebApp2\\PartWebApp2\\PartWebApp2.csproj",
+        "packagesPath": "C:\\Users\\linoy bekker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\linoy bekker\\Desktop\\PartyPro\\PartyWebApp2\\PartWebApp2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\razel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\linoy bekker\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -58,13 +58,13 @@
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[5.0.6, )"
+              "version": "[5.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.6, )"
+              "version": "[5.0.7, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",

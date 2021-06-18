@@ -8,16 +8,18 @@ namespace PartWebApp2.Models
 {
     public enum GenreType
     {
+        None = 0x0,
+
         [Display(Name = "Hip Hop")]
-        hipHop = 1,
+        hipHop = 0x1,
         [Display(Name = "Rock")]
-        rock = 2,
+        rock = 0x2,
         [Display(Name = "Techno")]
-        techno = 3,
+        techno = 0x3,
         [Display(Name = "House")]
-        house = 4,
+        house = 0x4,
         [Display(Name = "Pop")]
-        pop = 5,
+        pop = 0x5,
     }
 
     public class Genre

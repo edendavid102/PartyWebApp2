@@ -18,5 +18,7 @@ namespace PartWebApp2.Data
 
         public DbSet<PartWebApp2.Models.User> User { get; set; }
 
+        public DbSet<PartWebApp2.Models.Area> Area { get; set; }
+
     }
 }

@@ -23,8 +23,11 @@ namespace PartWebApp2.Models
         public Genre genre { get; set; }
         [Display(Name = "Minimal Age")]
         public int minimalAge { get; set; }
+
+        [Display(Name = "Area")]
         public int areaId { get; set; }
-        public Area area { get; set; } 
+        public Area area { get; set; }
+        [Display(Name = "Maximum Capacity")]
         public int maxCapacity { get; set; }
         public List<User> users { get; set; }
         public int ProducerId { get; set; }

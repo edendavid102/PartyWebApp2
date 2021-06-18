@@ -1,0 +1,47 @@
+﻿@model PartWebApp2.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_LoginLayout";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/LoginReg.css" />
+
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <form asp-action="Login" class="box">
+                    @*sent to login function*@
+                    <h1>Login</h1>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <p class="text-muted"> Please enter your login and password!</p>
+                    <input asp-for="email" class="form-control" id="exampleFormControlInput1" placeholder="email" />
+                    <span asp-validation-for="email" class="text-danger"></span>
+                    <input asp-for="password" class="form-control" id="exampleFormControlInput2" placeholder="Password" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                    <input type="submit" value="Login" class="btn btn-dark col-12" />
+                    <a asp-action="Register">Click here to register</a>
+                    @*send to register function*@
+                </form>
+                @if (ViewBag.Error != null)
+                {
+                    <div class="text-danger">@ViewBag.Error</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

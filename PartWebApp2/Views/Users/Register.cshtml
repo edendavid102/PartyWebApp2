@@ -1,0 +1,47 @@
+﻿@model PartWebApp2.Models.User
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LoginLayout";
+}
+
+<head>
+    
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <form asp-action="Register">
+                    <div class="box margeReg colblack">
+                        @*sent to register function*@
+                        <h1>Register</h1>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="firstName" class="form-control" placeholder="First Name" />
+                        <span asp-validation-for="firstName" class="text-danger"></span>
+                        <input asp-for="lastName" class="form-control" placeholder="Last Name" />
+                        <span asp-validation-for="lastName" class="text-danger"></span>
+                        <input asp-for="email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="email" class="text-danger"></span>
+                        <input asp-for="birthDate" class="form-control" placeholder="Birth Date" />
+                        <span asp-validation-for="birthDate" class="text-danger"></span>
+                        <input asp-for="password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="password" class="text-danger"></span>
+                        <input type="submit" value="Register" class="btn btn-dark col-12" />
+                        <a asp-action="Login">Click here to login page</a>
+                        @*send to login function*@
+                    </div>
+                </form>
+
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="text-danger">@ViewBag.Error</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
