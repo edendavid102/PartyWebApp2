@@ -11,6 +11,6 @@ namespace PartWebApp2.Models
     {
         public int Id { get; set; }
         public string SpotifyId { get; set; }
-        public ICollection<Party> parties { get; set; }
+        public List<Party> parties { get; set; }
     }
 }

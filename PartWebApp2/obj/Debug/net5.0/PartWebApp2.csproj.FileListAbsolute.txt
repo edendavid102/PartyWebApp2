@@ -305,3 +305,9 @@ C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debu
 C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\PartWebApp2.dll
 C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\ref\PartWebApp2.dll
 C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\PartWebApp2.genruntimeconfig.cache
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\bin\Debug\net5.0\SpotifyAPI.Web.dll
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\Razor\Views\Shared\_HomeLayout.cshtml.g.cs
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\Razor\Views\Shared\_LoginLayout.cshtml.g.cs
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\Razor\Views\Users\AccessDenied.cshtml.g.cs
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\Razor\Views\Users\Login.cshtml.g.cs
+C:\Users\razel\OneDrive\Documents\PartyWebApp2\PartyWebApp2\PartWebApp2\obj\Debug\net5.0\Razor\Views\Users\Register.cshtml.g.cs

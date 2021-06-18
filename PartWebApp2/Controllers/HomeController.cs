@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using PartWebApp2.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PartWebApp2.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,11 +20,13 @@ namespace PartWebApp2.Controllers
             _logger = logger;
         }
 
+        //[Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")] //only admin can see this 
         public IActionResult Privacy()
         {
             return View();

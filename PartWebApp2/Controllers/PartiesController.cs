@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PartWebApp2.Data;
 using PartWebApp2.Models;
+using PartWebApp2.Services;
 
 namespace PartWebApp2.Controllers
 {
     public class PartiesController : Controller
     {
         private readonly PartyWebAppContext _context;
+        private readonly ISpotifyClientService _spotifyClientService;
 
-        public PartiesController(PartyWebAppContext context)
+        public PartiesController(PartyWebAppContext context, ISpotifyClientService spotifyClientService)
         {
             _context = context;
+            _spotifyClientService = spotifyClientService;
         }
 
         // GET: Parties
@@ -35,14 +38,17 @@ namespace PartWebApp2.Controllers
             }
 
             var party = await _context.Party
+                .Include(a => a.area)
+                .Include(a => a.club)
+                .Include(a => a.genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (party == null)
             {
                 return NotFound();
             }
-
             return View(party);
         }
+
 
         // GET: Parties/Create
         public IActionResult Create()

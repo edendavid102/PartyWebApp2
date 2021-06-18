@@ -6,10 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PartWebApp2.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PartWebApp2.Services;
+using PartyWebApp2.Services;
 
 namespace PartWebApp2
 {
@@ -29,6 +27,9 @@ namespace PartWebApp2
 
             services.AddDbContext<PartyWebAppContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString("PartyWebAppContext")));
+
+            services.AddTransient<ISpotifyClientService, SpotifyClientService>();
+            services.AddTransient<IFacebookService, FacebookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
