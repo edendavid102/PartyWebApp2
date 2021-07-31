@@ -24,12 +24,14 @@ namespace PartWebApp2.Controllers
             _partiesService = service;
         }
 
+        //[Authorize]
         public IActionResult Index()
         {
             HomePage homePage = new HomePage();            
             return View(_partiesService.getDataForHomePage(homePage));
         }
 
+        [Authorize(Roles = "Admin")] //only admin can see this 
         public IActionResult Privacy()
         {
             return View();
