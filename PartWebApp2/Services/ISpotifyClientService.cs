@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using SpotifyAPI.Web;
+
+namespace PartWebApp2.Services
+{
+    public interface ISpotifyClientService
+    {
+        Task<List<FullArtist>> GetArtists(List<string> artists);
+
+        Task<FullArtist> GetArtist(string artistId);
+
+    }
+}

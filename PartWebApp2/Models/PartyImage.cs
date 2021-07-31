@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,11 +10,11 @@ namespace PartWebApp2.Models
 {
     public class PartyImage
     {
-        public int id { get; set; }
-        [Required]
-        [DataType(DataType.ImageUrl)]
+        public int Id { get; set; }
         public string imageUrl { get; set; }
-        public int partyId { get; set; }
-        public Party party { get; set; }
+
+        //One To One
+        public int PartyId { get; set; }
+        public Party Party { get; set; }
     }
 }

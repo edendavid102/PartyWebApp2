@@ -2,73 +2,103 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "_CreatePagesLayout";
 }
 
-<h1>Create</h1>
-
-<h4>Party</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<head>
+    <link rel="stylesheet" href="~/css/CreatePages.css" />
+</head>
+<body>
+    <div class="testbox">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" />
-                <span asp-validation-for="price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="eventDate" class="control-label"></label>
-                <input asp-for="eventDate" class="form-control" />
-                <span asp-validation-for="eventDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="startTime" class="control-label"></label>
-                <input asp-for="startTime" class="form-control" />
-                <span asp-validation-for="startTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="minimalAge" class="control-label"></label>
-                <input asp-for="minimalAge" class="form-control" />
-                <span asp-validation-for="minimalAge" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="areaId" class="control-label"></label>
-                <select asp-for="areaId" class="form-control" asp-items="ViewBag.areaId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="genreId" class="control-label"></label>
-                <select asp-for="genreId" class="form-control" asp-items="ViewBag.genreId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="clubId" class="control-label"></label>
-                <select asp-for="clubId" class="form-control" asp-items="ViewBag.clubId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="maxCapacity" class="control-label"></label>
-                <input asp-for="maxCapacity" class="form-control" />
-                <span asp-validation-for="maxCapacity" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                <label asp-for="ProducerId" class="control-label"></label>
-                <input asp-for="ProducerId" class="form-control" />
-                <span asp-validation-for="ProducerId" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <div class="banner">
+                    <h1>New Party</h1>
+                </div>
+                <div>
+                    <div class="item col-md-12">
+                        <p>Event's Name</p>
+                        <input asp-for="name" />
+                        <span asp-validation-for="name" class="text-danger"></span>
+                        <i class="fas"></i>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="item col-md-6">
+                            Date Of Event
+                            <input asp-for="eventDate" />
+                            <span asp-validation-for="eventDate" class="text-danger"></span>
+                            <i class="fas"></i>
+                        </div>
+                        <div class="item col-md-6">
+                            Time Of Event
+                            <input asp-for="startTime" />
+                            <span asp-validation-for="startTime" class="text-danger"></span>
+                            <i class="fas"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="item col-md-4">
+                        Club
+                        <select asp-for="clubId" asp-items="ViewBag.Clubs"></select>
+                        <i class="fas"></i>
+                    </div>
+                    <div class="item col-md-4">
+                        Area
+                        <select asp-for="areaId" asp-items="ViewBag.Areas"></select>
+                        <i class="fas"></i>
+                    </div>
+                    <div class="item col-md-4">
+                        Genre
+                        <select asp-for="genreId" asp-items="ViewBag.Genres"></select>
+                        <i class="fas"></i>
+                    </div>
+                </div>
+                <div class="item col-md-4">
+                    Minimal Age
+                    <input asp-for="minimalAge" />
+                    <span asp-validation-for="minimalAge" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-4">
+                    Price
+                    <input asp-for="price" type="number" />
+                    <span asp-validation-for="price" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-4">
+                    Max Capacity
+                    <input asp-for="maxCapacity" />
+                    <span asp-validation-for="maxCapacity" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-12">
+                    <input name="imageUrl" placeholder="URL" />
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-12">
+                    Performers
+                    <select name="performersId" asp-items="ViewBag.PerformersId"></select>
+                    <i class="fas"></i>
+                </div>
+
+                <div class="item col-md-12">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <button class="col-md-3">
+                        <a asp-action="Index">Previous</a>
+                    </button>
+                    <p class="col-md-6"></p>
+                    <button type="submit" value="Create" class="col-md-3">Create Party</button>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

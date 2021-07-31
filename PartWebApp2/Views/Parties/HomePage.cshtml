@@ -1,0 +1,80 @@
+﻿@model List<PartWebApp2.Models.Party>
+
+@{
+    ViewData["Title"] = "homePage";
+    Layout = "_OtherPages";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/HomePage.css" />
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+    <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
+        <h1>All Parties</h1>
+        <h3>Time To Celabrate</h3>
+        <form asp-action="FindParty">
+            <div class="input-group">
+                <input name="partyName" class="form-control text-center" placeholder="Search in your parties" />
+                <span class="text-danger"></span>
+                <div class="input-group-btn">
+                    <button type="submit" value="FindParty" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12">
+        <p class="col-md-10"></p>
+        <a asp-action="Create" class="col-md-2 btn-circle">Add New Party</a>
+    </div>
+    <div id="portfolio" class="container-fluid text-center">
+        <h1>All Parties</h1>
+        @{ var col = "color1"; var i = 0;}
+        @foreach (var item in Model)
+        {
+            <div class="container-fluid col-sm-4">
+                <div class="a-box">
+                    <div class="img-container">
+                        <div class="img-inner">
+                            <div class="inner-skew">
+                                <img src="@Html.DisplayFor( modelItem => item.partyImage.imageUrl)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-container @col">
+                        <h3>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </h3>
+                        <h5>
+                            @Html.DisplayFor(modelItem => item.eventDate.Day)/@Html.DisplayFor(modelItem => item.eventDate.Month)/@Html.DisplayFor(modelItem => item.eventDate.Year)
+                        </h5>
+                        <h5>
+                            @Html.DisplayFor(modelItem => item.genre.Type)
+                        </h5>
+                        <a asp-action="Details" asp-route-id="@item.Id">View More</a>
+                    </div>
+                </div>
+            </div>
+            i++;
+            if (i < 3)
+            {
+                col = "color1";
+            }
+            else if (i > 2 && i < 6)
+            {
+                col = "color2";
+            }
+            else if (i > 5 && i < 9)
+            {
+                col = "color3";
+            }
+            else if (i > 8 && i < 12)
+            {
+                col = "color4";
+            }
+            else
+            {
+                i = -1;
+            }
+        }
+    </div>
+</body>

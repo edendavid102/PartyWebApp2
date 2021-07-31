@@ -2,68 +2,106 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "_CreatePagesLayout";
 }
 
-<h1>Edit</h1>
+<head>
+    <style>
+        input {
+            float: none;
+        }
 
-<h4>Party</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+        h1 {
+            font-size: 4rem;
+            text-align: center;
+            height: 24vh;
+            line-height: 20vh;
+            color: #fcedd8;
+            font-family: 'Niconne', cursive;
+            font-weight: 700;
+            text-shadow: 5px 5px 0px #eb452b, 10px 10px 0px #efa032, 15px 15px 0px #46b59b, 20px 20px 0px #017e7f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="testbox">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ProducerId" />
+            <input type="hidden" asp-for="ticketsPurchased" />
             <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
+                <div class="banner">
+                    <h1>Edit @Model.name</h1>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="price" class="control-label"></label>
-                <input asp-for="price" class="form-control" />
-                <span asp-validation-for="price" class="text-danger"></span>
+                <div class="item col-md-12">
+                    <p>Event's Name</p>
+                    <input asp-for="name" />
+                    <span asp-validation-for="name" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="eventDate" class="control-label"></label>
-                <input asp-for="eventDate" class="form-control" />
-                <span asp-validation-for="eventDate" class="text-danger"></span>
+                <div class="item col-md-6">
+                    Date Of Event
+                    <input asp-for="eventDate" />
+                    <span asp-validation-for="eventDate" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-6">
+                    Time Of Event
+                    <input asp-for="startTime" />
+                    <span asp-validation-for="startTime" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="startTime" class="control-label"></label>
-                <input asp-for="startTime" class="form-control" />
-                <span asp-validation-for="startTime" class="text-danger"></span>
+                <div class="item col-md-4">
+                    Club
+                    <select asp-for="clubId" asp-items="ViewBag.Clubs"></select>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-4">
+                    Area
+                    <select asp-for="areaId" asp-items="ViewBag.Areas"></select>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-4">
+                    Genre
+                    <select asp-for="genreId" asp-items="ViewBag.Genres"></select>
+                    <i class="fas"></i>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="minimalAge" class="control-label"></label>
-                <input asp-for="minimalAge" class="form-control" />
+            <div class="form-group item col-md-4">
+                Minimal Age
+                <input asp-for="minimalAge" />
                 <span asp-validation-for="minimalAge" class="text-danger"></span>
+                <i class="fas"></i>
             </div>
-            <div class="form-group">
-                <label asp-for="areaId" class="control-label"></label>
-                <select asp-for="areaId" class="form-control" asp-items="ViewBag.areaId"></select>
-                <span asp-validation-for="areaId" class="text-danger"></span>
+            <div class="form-group item col-md-4">
+                Price
+                <input asp-for="price" type="number" />
+                <span asp-validation-for="price" class="text-danger"></span>
+                <i class="fas"></i>
             </div>
-            <div class="form-group">
-                <label asp-for="maxCapacity" class="control-label"></label>
-                <input asp-for="maxCapacity" class="form-control" />
+            <div class="form-group item col-md-4">
+                Max Capacity
+                <input asp-for="maxCapacity" />
                 <span asp-validation-for="maxCapacity" class="text-danger"></span>
+                <i class="fas"></i>
             </div>
-            <div class="form-group">
-                <label asp-for="ProducerId" class="control-label"></label>
-                <input asp-for="ProducerId" class="form-control" />
-                <span asp-validation-for="ProducerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group item col-md-12">
+                <div class="col-md-6">
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-danger btn-lg btn-block">Cancel</a>
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Save" class="btn btn-success btn-lg btn-block" />
+                </div>
             </div>
         </form>
     </div>
-</div>
+</body>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PartWebApp2.Models
 {
-    public  class Club
+    public class Club
     {
         public int Id { get; set; }
         public string LocationId { get; set; }

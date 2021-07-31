@@ -9,17 +9,16 @@ namespace PartWebApp2.Models
     public enum GenreType
     {
         None = 0x0,
-
         [Display(Name = "Hip Hop")]
-        hipHop = 0x1,
+        HipHop = 1,
         [Display(Name = "Rock")]
-        rock = 0x2,
+        Rock = 2,
         [Display(Name = "Techno")]
-        techno = 0x3,
+        Techno = 3,
         [Display(Name = "House")]
-        house = 0x4,
+        House = 4,
         [Display(Name = "Pop")]
-        pop = 0x5,
+        Pop = 5,
     }
 
     public class Genre
@@ -28,5 +27,4 @@ namespace PartWebApp2.Models
         public GenreType Type { get; set; }
         public List<Party> parties { get; set; }
     }
-
 }
