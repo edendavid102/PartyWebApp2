@@ -8,22 +8,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using PartWebApp2.Controllers;
+using PartWebApp2.Services;
 
 namespace PartWebApp2.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly PartiesService _partiesService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, PartiesService service)
         {
             _logger = logger;
+            _partiesService = service;
         }
 
         //[Authorize]
         public IActionResult Index()
         {
-            return View();
+            HomePage homePage = new HomePage();            
+            return View(_partiesService.getDataForHomePage(homePage));
         }
 
         [Authorize(Roles = "Admin")] //only admin can see this 

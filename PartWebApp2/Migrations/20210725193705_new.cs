@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PartWebApp2.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -85,15 +85,16 @@ namespace PartWebApp2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    price = table.Column<double>(type: "float", nullable: false),
                     eventDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    startTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    genreId = table.Column<int>(type: "int", nullable: false),
                     minimalAge = table.Column<int>(type: "int", nullable: false),
+                    startTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ticketsPurchased = table.Column<int>(type: "int", nullable: false),
+                    genreId = table.Column<int>(type: "int", nullable: false),
                     areaId = table.Column<int>(type: "int", nullable: false),
-                    maxCapacity = table.Column<int>(type: "int", nullable: false),
+                    clubId = table.Column<int>(type: "int", nullable: false),
                     ProducerId = table.Column<int>(type: "int", nullable: false),
-                    clubId = table.Column<int>(type: "int", nullable: false)
+                    maxCapacity = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,17 +123,17 @@ namespace PartWebApp2.Migrations
                 name: "PartyImage",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    imageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    partyId = table.Column<int>(type: "int", nullable: false)
+                    imageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PartyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartyImage", x => x.id);
+                    table.PrimaryKey("PK_PartyImage", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PartyImage_Party_partyId",
-                        column: x => x.partyId,
+                        name: "FK_PartyImage_Party_PartyId",
+                        column: x => x.PartyId,
                         principalTable: "Party",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -202,9 +203,9 @@ namespace PartWebApp2.Migrations
                 column: "genreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PartyImage_partyId",
+                name: "IX_PartyImage_PartyId",
                 table: "PartyImage",
-                column: "partyId",
+                column: "PartyId",
                 unique: true);
 
             migrationBuilder.CreateIndex(

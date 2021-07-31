@@ -7,17 +7,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PartWebApp2.Models
 {
-
     public enum AreaType
     {
         [Display(Name = "Center")]
-        center = 1,
+        Center = 1,
         [Display(Name = "North")]
-        north = 2,
+        North = 2,
         [Display(Name = "South")]
-         south= 3,
+        South = 3,
         [Display(Name = "Hashron")]
-        hasharon = 4,
+        Hasharon = 4,
     }
     public class Area
     {

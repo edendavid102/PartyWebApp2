@@ -104,6 +104,9 @@ namespace PartWebApp2.Migrations
                     b.Property<DateTime>("startTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ticketsPurchased")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("areaId");
@@ -117,21 +120,20 @@ namespace PartWebApp2.Migrations
 
             modelBuilder.Entity("PartWebApp2.Models.PartyImage", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("imageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("partyId")
+                    b.Property<int>("PartyId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<string>("imageUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("partyId")
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId")
                         .IsUnique();
 
                     b.ToTable("PartyImage");
@@ -244,13 +246,13 @@ namespace PartWebApp2.Migrations
 
             modelBuilder.Entity("PartWebApp2.Models.PartyImage", b =>
                 {
-                    b.HasOne("PartWebApp2.Models.Party", "party")
-                        .WithOne("image")
-                        .HasForeignKey("PartWebApp2.Models.PartyImage", "partyId")
+                    b.HasOne("PartWebApp2.Models.Party", "Party")
+                        .WithOne("partyImage")
+                        .HasForeignKey("PartWebApp2.Models.PartyImage", "PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("party");
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("PartyPerformer", b =>
@@ -300,7 +302,7 @@ namespace PartWebApp2.Migrations
 
             modelBuilder.Entity("PartWebApp2.Models.Party", b =>
                 {
-                    b.Navigation("image");
+                    b.Navigation("partyImage");
                 });
 #pragma warning restore 612, 618
         }

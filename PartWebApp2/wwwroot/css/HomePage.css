@@ -1,12 +1,215 @@
-﻿
+﻿.a-box {
+    display: inline-block;
+    width: 280px;
+    text-align: center;
+}
+
+.card-center {
+    /*    background-image: url("https://images.unsplash.com/photo-1517999144091-3d9dca6d1e43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80");
+*/ /*background-size: cover;*/
+    padding: 140px 25px;
+    font-family: Montserrat, sans-serif;
+}
+
+.img-container {
+    height: 230px;
+    width: 240px;
+    overflow: hidden;
+    border-radius: 0px 0px 20px 20px;
+    display: inline-block;
+}
+
+    .img-container img {
+        transform: skew(0deg, -13deg);
+        height: 270px;
+        margin: -35px 0px 0px -70px;
+    }
+
+.inner-skew {
+    display: inline-block;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 0px;
+    transform: skew(0deg, 13deg);
+    font-size: 0px;
+    margin: 30px 0px 0px 0px;
+    background: #c8c2c2;
+    height: 270px;
+    width: 240px;
+}
+
+.text-container-blue {
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    padding: 120px 20px 20px 20px;
+    border-radius: 20px;
+    margin: -120px 0px 0px 0px;
+    line-height: 19px;
+    font-size: 14px;
+}
+
+.color1 {
+    background: #ff70a6;
+}
+
+.color2 {
+    background: #ff9770;
+}
+
+.color3 {
+    background: #90f1ef;
+}
+
+.color4 {
+    background: #e9ff70;
+}
+
+.input-group {
+    width: 70%; 
+    margin: 20px 40px 10px 170px;
+}
+.text-container {
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    padding: 120px 20px 20px 20px;
+    border-radius: 20px;
+    margin: -120px 0px 0px 0px;
+    line-height: 19px;
+    font-size: 14px;
+}
+
+    .text-container h3 {
+        margin: 10px 0px 10px 0px;
+        color: #000000;
+        font-size: 32px;
+    }
+
+carusel-body {
+    height: 600px;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 500px 00px;
+    grid-template-columns: 1fr 30px 30px 30px 30px 30px 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+main#carousel {
+    grid-row: 1 / 2;
+    grid-column: 1 / 8;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 600px;
+    --items: 5;
+    --middle: 3;
+    --position: 1;
+    pointer-events: none;
+}
+
+div.item {
+    position: absolute;
+    width: 320px;
+    height: 430px;
+    background-color: coral;
+    --r: calc(var(--position) - var(--offset));
+    --abs: max(calc(var(--r) * -1), var(--r));
+    transition: all 0.25s linear;
+    transform: rotateY(calc(-10deg * var(--r))) translateX(calc(-300px * var(--r)));
+    z-index: calc((var(--position) - var(--abs)));
+}
+
+    div.item:nth-of-type(1) {
+        --offset: 1;
+        background-color: #90f1ef;
+    }
+
+    div.item:nth-of-type(2) {
+        --offset: 2;
+        background-color: #ff70a6;
+    }
+
+    div.item:nth-of-type(3) {
+        --offset: 3;
+        background-color: #ff9770;
+    }
+
+    div.item:nth-of-type(4) {
+        --offset: 4;
+        background-color: #ffd670;
+    }
+
+    div.item:nth-of-type(5) {
+        --offset: 5;
+        background-color: #e9ff70;
+    }
+
+input:nth-of-type(1) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+    input:nth-of-type(1):checked ~ main#carousel {
+        --position: 1;
+    }
+
+input:nth-of-type(2) {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+    input:nth-of-type(2):checked ~ main#carousel {
+        --position: 2;
+    }
+
+input:nth-of-type(3) {
+    grid-column: 4 /5;
+    grid-row: 2 / 3;
+}
+
+    input:nth-of-type(3):checked ~ main#carousel {
+        --position: 3;
+    }
+
+input:nth-of-type(4) {
+    grid-column: 5 / 6;
+    grid-row: 2 / 3;
+}
+
+    input:nth-of-type(4):checked ~ main#carousel {
+        --position: 4;
+    }
+
+input:nth-of-type(5) {
+    grid-column: 6 / 7;
+    grid-row: 2 / 3;
+}
+
+    input:nth-of-type(5):checked ~ main#carousel {
+        --position: 5;
+    }
+
+
 body {
+    /*background-image: url("https://images.unsplash.com/photo-1517999144091-3d9dca6d1e43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80");
+    background-size: cover;*/
+    background-color: black;
     font: 400 15px Lato, sans-serif;
     line-height: 1.8;
     color: #818181;
 }
 
+h1 {
+    font-size: 40px;
+    text-transform: uppercase;
+    color: rgb(16 250 221 / 0.83);
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
 h2 {
-    font-size: 24px;
+    font-size: 40px;
     text-transform: uppercase;
     color: #000000;
     font-weight: 600;
@@ -16,26 +219,31 @@ h2 {
 h4 {
     font-size: 19px;
     line-height: 1.375em;
-    color: #303030;
+    color: #000000;
     font-weight: 400;
     margin-bottom: 30px;
 }
 
 .jumbotron {
-    background-image: url("https://c4.wallpaperflare.com/wallpaper/160/495/830/colorful-background-vivid-colors-wallpaper-preview.jpg");
-    background-size: cover;
-    height: 450px;
+    /*    background-image: url("https://images.unsplash.com/photo-1517999144091-3d9dca6d1e43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80");
+*/ /*background-size: cover;*/
+    background-color: black;
+    height: 380px;
     color: #fff;
-    padding: 100px 25px;
+    padding: 140px 25px;
+    font-family: Montserrat, sans-serif;
+}
+
+.jumbo {
+    /*    background-color: #249bc7;
+*/ height: 500px;
+    color: #fff;
+    padding: 140px 25px;
     font-family: Montserrat, sans-serif;
 }
 
 .container-fluid {
-    padding: 60px 50px;
-}
-
-.bg-grey {
-    background-color: #f6f6f6;
+    padding: 20px 40px;
 }
 
 .logo-small {
@@ -58,19 +266,6 @@ h4 {
         width: 100%;
         height: 100%;
         margin-bottom: 10px;
-    }
-
-.carousel-control.right, .carousel-control.left {
-    background-image: none;
-    color: #f4511e;
-}
-
-.carousel-indicators li {
-    border-color: #f4511e;
-}
-
-    .carousel-indicators li.active {
-        background-color: #f4511e;
     }
 
 .item h4 {
@@ -104,7 +299,7 @@ h4 {
 .panel-heading {
     color: #fff !important;
     background-color: #f4511e !important;
-    padding: 25px;
+    padding: 3px;
     border-bottom: 1px solid transparent;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -117,6 +312,7 @@ h4 {
 }
 
     .panel-footer h3 {
+        color: #aaa;
         font-size: 32px;
     }
 
@@ -133,11 +329,13 @@ h4 {
 
 .navbar {
     margin-bottom: 0;
-    background-image: url("https://c4.wallpaperflare.com/wallpaper/160/495/830/colorful-background-vivid-colors-wallpaper-preview.jpg");
-    background-size: 1300px;
+    /*    background-image: url("https://c4.wallpaperflare.com/wallpaper/160/495/830/colorful-background-vivid-colors-wallpaper-preview.jpg");
+*/
+    background-color: black;
+    background-size: 1500px;
     z-index: 9999;
     border: 0;
-    font-size: 12px !important;
+    font-size: 14px !important;
     line-height: 1.42857143 !important;
     letter-spacing: 4px;
     border-radius: 0;
@@ -145,12 +343,14 @@ h4 {
 }
 
     .navbar li a, .navbar .navbar-brand {
-        color: #fff !important;
+        color: #00ffea !important;
+        font-size: 14px !important;
+        display: flex;
+        justify-content: center;
     }
 
 .navbar-nav li a:hover, .navbar-nav li.active a {
-    color: #f4511e !important;
-    background-color: #fff !important;
+    color: #ff70a6 !important;
 }
 
 .navbar-default .navbar-toggle {
