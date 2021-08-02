@@ -69,16 +69,24 @@ namespace PartWebApp2.Controllers
         {
             ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
-            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");                    
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
 
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
                 .Include(p => p.partyImage)
-                .Include(p => p.performers)
-                .Where(p => p.name.Replace(" ", "").Contains(partyName.Replace(" ", "")));
+                .Include(p => p.performers);
+            if (!String.IsNullOrEmpty(partyName))
+            {
+                var reslut = partyWebAppContext.Where(p => p.name.Replace(" ", "").Contains(partyName.Replace(" ", "")));
+                return View("HomePage", await reslut.ToListAsync());
 
-            return View("HomePage", await partyWebAppContext.ToListAsync());
+            }
+            else
+            {
+                var reslut = partyWebAppContext.Where(p => p.name.Contains(partyName));
+                return View("HomePage", await reslut.ToListAsync());
+            }
         }
 
         [HttpPost]
