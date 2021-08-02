@@ -45,6 +45,7 @@ namespace PartWebApp2.Controllers
             ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
+
             var partyWebAppContext = _context.Party.Include(p => p.area)
                         .Include(p => p.club)
                         .Include(p => p.genre)
@@ -66,13 +67,16 @@ namespace PartWebApp2.Controllers
         [Authorize]
         public async Task<IActionResult> findPartyResult(string partyName)
         {
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");                    
 
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
                 .Include(p => p.partyImage)
                 .Include(p => p.performers)
-                .Where(p => p.name.Contains(partyName));
+                .Where(p => p.name.Replace(" ", "").Contains(partyName.Replace(" ", "")));
 
             return View("HomePage", await partyWebAppContext.ToListAsync());
         }
