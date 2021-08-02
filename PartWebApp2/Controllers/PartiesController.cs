@@ -50,9 +50,20 @@ namespace PartWebApp2.Controllers
             return View(await partyWebAppContext.ToListAsync());
         }
 
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> findParty(string partyName)
+        public ActionResult findParty(string partyName)
         {
+
+            return RedirectToAction(nameof(findPartyResult), new { partyName = partyName });
+
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> findPartyResult(string partyName)
+        {
+
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
@@ -60,7 +71,30 @@ namespace PartWebApp2.Controllers
                 .Include(p => p.performers)
                 .Where(p => p.name.Contains(partyName));
 
-            return View("homePage", await partyWebAppContext.ToListAsync());
+            return View("HomePage", await partyWebAppContext.ToListAsync());
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult MultipleSearch(int? genreId, int? clubId, int? areaId)
+        {
+            return RedirectToAction(nameof(MultipleSearchResult), new { genreId = genreId, clubId = clubId, areaId = areaId });
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> MultipleSearchResult(int? genreId, int? clubId, int? areaId)
+        {
+            var PartyWebAppContext = _context.Party.Include(p => p.genre)
+                .Include(p => p.club).Include(p => p.area)
+                .Where(p => p.genreId.Equals(genreId) &&
+                p.clubId.Equals(clubId) && p.areaId.Equals(areaId));
+
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type", genreId);
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name", clubId);
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type", areaId);
+            return View("HomePage", await PartyWebAppContext.ToListAsync());
         }
 
         [Authorize]
