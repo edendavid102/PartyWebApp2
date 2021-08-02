@@ -49,31 +49,47 @@ namespace PartWebApp2.Services
             performers = _context.Performer.ToList();
             return performers;
         }
-        public void addPerformersToParty(Party party, List<int> PerformersId)
-        {
-            for (int i = 0; i < PerformersId.Count; i++)
-            {
-                if (_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties == null)
-                {
-                    _context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties = new List<Party>();
-                }
-                if (_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties.FirstOrDefault(p => p.Id == party.Id) == null)
-                {
-                    _context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties.Add(party);
-                }
 
-                if (_context.Party.FirstOrDefault(p => p.Id == party.Id).performers == null)
+        public void addPerformersToParty(Party party, List<string> perfomersSpotifyIds)
+        {
+            foreach (string spotifyId in perfomersSpotifyIds)
+            {
+                if (party.performers == null) party.performers = new List<Performer>();
+                var existingPerformer = _context.Performer.FirstOrDefault(performer => performer.SpotifyId == spotifyId);
+                bool isPerformerExistInDb = existingPerformer != null;
+                if (isPerformerExistInDb)
                 {
-                    _context.Party.FirstOrDefault(p => p.Id == party.Id).performers = new List<Performer>();
-                }
-                if (_context.Party.FirstOrDefault(p => p.Id == party.Id).performers.FirstOrDefault(p => p.Id == PerformersId[i]) == null)
+                    addExistingPerformerToParty(party, existingPerformer);
+                } else
                 {
-                    _context.Party.FirstOrDefault(p => p.Id == party.Id).performers
-       .Add(_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]));
+                    var newPerformer = new Performer {
+                        SpotifyId = spotifyId,
+                        parties = new List<Party>()
+                    };
+                    addNewPerformerToParty(party, newPerformer);
                 }
-                _context.SaveChanges();
             }
-            _context.SaveChanges();
+        }
+
+        public void addNewPerformerToParty(Party party, Performer performer)
+        {
+            performer.parties.Add(party);
+            party.performers.Add(performer);
+            _context.Performer.Add(performer);
+            _context.Add(party);
+        }
+
+        public void addExistingPerformerToParty(Party party, Performer performer)
+        {
+            if (performer.parties != null) performer.parties.Add(party);
+            else
+            {
+                performer.parties = new List<Party>();
+                performer.parties.Add(party);
+            }
+            party.performers.Add(performer);
+            _context.Update(performer);
+            _context.Add(party);
         }
 
         public void addImageToParty(Party party, string Url)

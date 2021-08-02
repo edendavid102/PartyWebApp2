@@ -10,8 +10,8 @@ using PartWebApp2.Data;
 namespace PartWebApp2.Migrations
 {
     [DbContext(typeof(PartyWebAppContext))]
-    [Migration("20210727153237_newUpdateModels")]
-    partial class newUpdateModels
+    [Migration("20210731134332_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

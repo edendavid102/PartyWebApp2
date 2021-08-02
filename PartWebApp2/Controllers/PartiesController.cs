@@ -131,6 +131,12 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
+            if (party.performers != null)
+            {
+                List<string> performersSpotifyIds = party.performers.Select(performer => performer.SpotifyId).ToList();
+                var artists = await _spotifyClientService.GetArtists(performersSpotifyIds);
+                ViewBag.artists = artists.ToArray();
+            }
 
             return View(party);
         }
@@ -154,19 +160,17 @@ namespace PartWebApp2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, producer")]
-        public async Task<IActionResult> Create([Bind("Id,name,eventDate,minimalAge,startTime,genreId,areaId,clubId,ProducerId,maxCapacity,price,ticketsPurchased")] Party party, string imageUrl, List<int> performersId)
+        public async Task<IActionResult> Create([Bind("Id,name,eventDate,minimalAge,startTime,genreId,areaId,clubId,ProducerId,maxCapacity,price,ticketsPurchased")] Party party, string imageUrl, List<string> performersId)
         {
             if (ModelState.IsValid)
             {
                 var producerId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
                 party.ProducerId = Int32.Parse(producerId);
                 party.ticketsPurchased = 0;
+                party.performers = new List<Performer>();
+                _partiesService.addPerformersToParty(party, performersId);
                 _partiesService.addImageToParty(party, imageUrl);
                 await _context.SaveChangesAsync();
-
-                _partiesService.addPerformersToParty(party, performersId);
-                await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
             return View(party);

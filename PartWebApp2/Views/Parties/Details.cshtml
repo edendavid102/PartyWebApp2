@@ -8,129 +8,153 @@
 <head>
     <link rel="stylesheet" href="~/css/HomePage.css" />
     <style>
-
-        h1 {
-            font-size: 7rem;
+        h2 {
             text-align: center;
-            height: 24vh;
-            line-height: 20vh;
-            color: #fcedd8;
-            font-family: 'Niconne', cursive;
-            font-weight: 700;
-            text-shadow: 5px 5px 0px #eb452b, 10px 10px 0px #efa032, 15px 15px 0px #46b59b, 20px 20px 0px #017e7f;
+            color: #ffffff;
         }
-
-        .image {
-            width: 50%;
-            float: left;
-            margin-top: 20px;
-            height: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            display: flex;
-        }
-
-        .about {
-            justify-content: center;
-            flex-direction: row;
-        }
-
-        .aboutitem {
-            width: 50%;
-            float: right;
+        h3 {
             text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            padding-top: 70px;
+            color: #ffffff;
         }
-
-        .buytickets {
-            width: 90%;
-            float: right;
-            font-size: 25px;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        table {
-            border: #3fc4da 3px solid;
-            width: 100%;
-        }
-
-        th, td {
+        h4 {
             text-align: center;
-            padding: 10px;
+            color: #ffffff;
         }
-
-        tr:nth-child(even) {
-            background-color: #000000
+        .thumbnail {
+            background-color: transparent;
         }
-
-        th {
-            background-color: #3fc4da;
-            color: white;
+        .image-background {
+            margin-top: 100px;
+            background-image: url(@Html.DisplayFor(model => model.partyImage.imageUrl));
         }
     </style>
 </head>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-    <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
-        <h1 class="titledit">@Model.name</h1>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Open Doors</th>
-                <th>Genre</th>
-                <th>Area</th>
-                <th>Club</th>
-                <th>Minimal Age</th>
-                <th>Price</th>
-            </tr>
-            <tr>
-                <td>@Html.DisplayFor(model => model.eventDate)</td>
-                <td>@Html.DisplayFor(model => model.startTime)</td>
-                <td>@Html.DisplayFor(model => model.genre.Type)</td>
-                <td>@Html.DisplayFor(model => model.area.Type)</td>
-                <td>@Html.DisplayFor(model => model.club.Name)</td>
-                <td>+@Html.DisplayFor(model => model.minimalAge)</td>
-                <td>@Html.DisplayFor(model => model.price) ILS</td>
-            </tr>
-        </table>
+    <div class="jumbotron text-center image-background">
+        <h1>@Html.DisplayFor(model => model.name)</h1>
+        <p>@Html.DisplayFor(model => model.eventDate)</p>
     </div>
-
     <div id="portfolio" class="container-fluid text-center">
-        <div class="image">
-            <img src="@Html.DisplayFor(model => model.partyImage.imageUrl)">
-        </div>
-        <div class="aboutitem">
-            <table class="aboutitem" style="border: cornflowerblue 0px solid; width: 90%;">
-                <tr>
-                    <th style="background-color: cornflowerblue;">Performers</th>
-                </tr>
-                <tr>
-                    <td>Omer Adam</td>
-                </tr>
-                <tr>
-                    <td>Omer Adam</td>
-                </tr>
-                <tr>
-                    <td>Omer Adam</td>
-                </tr>
-            </table>
-
-            <table class="aboutitem" style="border: cornflowerblue 0px solid; width: 90%;">
-                <tr>
-                    <th style="background-color: cornflowerblue;">Ticket Status</th>
-                </tr>
-                <tr>
-                    <td> @Html.DisplayFor(model => model.ticketsPurchased) / @Html.DisplayFor(model => model.maxCapacity)</td>
-                </tr>
-            </table>
-            <a class="btn btn-success buytickets" asp-action="BuyTickets" asp-route-id="@Model.Id">Buy Tickets</a>
-        </div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>|
-        <a asp-controller="PartyImages" asp-action="Edit" asp-route-id="@Model.partyImage.Id">Edit Party Image</a>
+        <h2>Lineup</h2><br>
+        <h4>The best of the @Html.DisplayFor(model => model.genre.Type) genre</h4>
+        <div class="row text-center slideanim">
+            @for (var i = 0; i < ViewBag.artists.Length; i++)
+            {
+                var artist = ViewBag.artists[i];
+                var artistPlayer = "https://open.spotify.com/embed/artist/" + artist.Id + "?theme=0";
+                    <div class="col-sm-5 col-md-3">
+                        <div class="thumbnail">
+                            <img src=@artist.Images[0].Url alt=@artist.Name width="400" height="300" style="margin-bottom:-25px" />
+                            <div class="caption">
+                                <iframe src=@artistPlayer
+                                        width="317"
+                                        height="80"
+                                        frameBorder="0"
+                                        allowtransparency="true"
+                                        allow="encrypted-media">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div><br>
     </div>
-   
-</body>
+    @{
+        var googleApiKey = "AIzaSyAfpKKSNaLzexuYOjKed1qvBlCTcEgHwco";
+        var googleMapSrc = "https://www.google.com/maps/embed/v1/place?key=" + googleApiKey + "&q=place_id:" + Model.club.LocationId;
+        <div id="services" class="container-fluid text-center">
+            <h2>LOCATION</h2>
+            <br>
+            <div class="row slideanim">
+                <div class="col-sm-3">
+                    <h4>CAPACITY</h4>
+                    <span class="glyphicon glyphicon-user logo-small"></span>
+                    <h2>@Html.DisplayFor(model => model.maxCapacity)</h2>
+                </div>
+                <div class="col-sm-6">
+                    <iframe width="450"
+                            height="300"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            src=@googleMapSrc>
+                    </iframe>
+                </div>
+                <div class="col-sm-3">
+                    <h4>DOORS OPEN AT</h4>
+                    <span class="glyphicon glyphicon-time logo-small"></span>
+                    <h2>@Html.DisplayFor(model => model.startTime)</h2>
+                </div>
+            </div>
+        </div>
+    }
+    <hr />
+    <div id="about" class="container-fluid bg-grey">
+        <div class="row">
+            <div class="col-lg-10">
+                <h2>So what are you waiting for?</h2>
+                <p>Mind youself that in order to get into the party you'll have to be at the minimum age of @Html.DisplayFor(model => model.minimalAge). Following the venue instructions is mandatory at all time. We're not to be hold responsible to any damage inflicted upon the costumer at the time of the event. </p>
+            </div>
+            <div class="col align-self-end">
+                <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#myModal">Get a Ticket!</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="flex-column">
+                    <div class="container-md m-4 p-3">
+                        <h4 class="mb-3">Payment</h4>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h4 class="my-0">@Html.DisplayFor(model => model.name)</h4>
+                                    <small class="text-muted">@Html.DisplayFor(model => model.eventDate)</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Total (USD)</span>
+                                <strong>@Html.DisplayFor(model => model.price)</strong>
+                            </li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-name">Name on card</label>
+                                <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                                <small class="text-muted">Full name as displayed on card</small>
+                                <div class="invalid-feedback">
+                                    Name on card is required
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number">Credit card number</label>
+                                <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                                <div class="invalid-feedback">
+                                    Credit card number is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                                <div class="invalid-feedback">
+                                    Expiration date required
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                                <div class="invalid-feedback">
+                                    Security code required
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <button class="btn btn-primary btn-lg btn-block" data-dismiss="modal" type="submit">Ticket me already!</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
