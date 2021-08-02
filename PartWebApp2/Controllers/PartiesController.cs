@@ -42,6 +42,9 @@ namespace PartWebApp2.Controllers
         [Authorize]
         public async Task<IActionResult> homePage()
         {
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
             var partyWebAppContext = _context.Party.Include(p => p.area)
                         .Include(p => p.club)
                         .Include(p => p.genre)
