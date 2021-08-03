@@ -8,6 +8,7 @@
 <head>
     <link rel="stylesheet" href="~/css/HomePage.css" />
 </head>
+
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
     <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
         <h1> Welcome</h1>
@@ -15,7 +16,7 @@
 
         <form asp-action="FindParty">
             <div class="input-group">
-                <input name="partyName" class="form-control"  placeholder="Search specific party" />
+                <input name="partyName" class="form-control" placeholder="Search specific party" />
                 <span class="text-danger"></span>
                 <div class="input-group-btn">
                     <button type="submit" value="FindParty" class="btn btn-danger">Search</button>
@@ -32,37 +33,34 @@
             <input type="radio" name="position" />
             <input type="radio" name="position" />
             <main id="carousel">
-                @{var i = 0;
-                    foreach (var item in Model.ToList().OrderByDescending(item => item.ticketsPurchased))
+                @{
+                    foreach (var item in Model.ToList().OrderByDescending(item => item.ticketsPurchased).Take(5))
                     {
-                        while (i < 5)
-                        {
-                            <div class="item">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <img src="@Html.DisplayFor( modelItem => item.partyImage.imageUrl)" height="240" width="320" />
-                                        <div class="card-title text-black-50">
-                                            <h3>
-                                                @Html.DisplayFor(modelItem => item.name)
-                                            </h3>
-                                        </div>
-                                    </div>
-                                    <div class="card-content">
+
+                        <div class="item">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="@Html.DisplayFor( modelItem => item.partyImage.imageUrl)" height="240" width="320" />
+                                    <div class="card-title text-black-50">
                                         <h3>
-                                            @Html.DisplayFor(modelItem => item.eventDate.Day)/@Html.DisplayFor(modelItem => item.eventDate.Month)/@Html.DisplayFor(modelItem => item.eventDate.Year)
+                                            @Html.DisplayFor(modelItem => item.name)
                                         </h3>
-                                        <h5>
-                                            @Html.DisplayFor(modelItem => item.genre.Type)
-                                        </h5>
-                                        <h5>
-                                            @Html.DisplayFor(modelItem => item.area.Type)
-                                        </h5>
-                                        <a asp-action="Details" asp-route-id="@item.Id">View More</a>
                                     </div>
                                 </div>
+                                <div class="card-content">
+                                    <h3>
+                                        @Html.DisplayFor(modelItem => item.eventDate.Day)/@Html.DisplayFor(modelItem => item.eventDate.Month)/@Html.DisplayFor(modelItem => item.eventDate.Year)
+                                    </h3>
+                                    <h5>
+                                        @Html.DisplayFor(modelItem => item.genre.Type)
+                                    </h5>
+                                    <h5>
+                                        @Html.DisplayFor(modelItem => item.area.Type)
+                                    </h5>
+                                    <a asp-action="Details" asp-route-id="@item.Id">View More</a>
+                                </div>
                             </div>
-                            i++;
-                        }
+                        </div>
                     }
                 }
             </main>

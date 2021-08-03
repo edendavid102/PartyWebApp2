@@ -12,7 +12,6 @@ namespace PartWebApp2.Models
     {
         public int Id { get; set; }
         public string imageUrl { get; set; }
-
         //One To One
         public int PartyId { get; set; }
         public Party Party { get; set; }

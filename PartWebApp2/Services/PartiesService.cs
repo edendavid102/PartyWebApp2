@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using PartWebApp2.Services;
 using Microsoft.AspNetCore.Http;
 
+
 namespace PartWebApp2.Services
 {
     public class PartiesService
@@ -24,31 +25,61 @@ namespace PartWebApp2.Services
             _context = context;
         }
 
-        public HomePage getDataForHomePage(HomePage homePage)
+        public List<Party> convertContextPartyToList()
+        {
+            return _context.Party
+                .Include(p => p.partyImage)
+                .Include(p => p.area)
+                .Include(p => p.genre)
+                .Include(p => p.club)
+                .ToList();
+        }
+        public List<Performer> convertContextPerformerToList()
+        {
+            return _context.Performer
+                .Include(p => p.parties)
+                .ToList();
+        }
+        public List<Club> convertContextClubToList()
+        {
+            return _context.Club
+                .Include(c => c.Parties)
+                .ToList();
+        }
+
+        public void homePageInit(HomePage homePage)
         {
             homePage.clubs = new List<Club>();
             homePage.parties = new List<Party>();
             homePage.performers = new List<Performer>();
-            List<Party> allParties = _context.Party.Include(p => p.partyImage).ToList();
-            List<Performer> allPerformers = _context.Performer.Include(p => p.parties).ToList();
-            List<Club> allClubs = _context.Club.ToList();
-            if (allParties != null && allPerformers != null && allClubs != null)
+        }
+        public HomePage indexInitNumOfObject(HomePage homePage, int numOfObject)
+        {
+
+            homePageInit(homePage);
+
+            List<Party> allParties = convertContextPartyToList();
+            List<Performer> allPerformers = convertContextPerformerToList();
+            List<Club> allClubs = convertContextClubToList();
+
+
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    homePage.parties.Add(allParties[i]);
-                    homePage.performers.Add(allPerformers[i]);
-                    homePage.clubs.Add(allClubs[i]);
-                }
+                homePage.parties.Add(allParties[i]);
+                homePage.performers.Add(allPerformers[i]);
+                homePage.clubs.Add(allClubs[i]);
             }
+
             return homePage;
         }
 
-        public List<Performer> allPerformers(List<Performer> performers)
+        const int numOfObjectToReturnInIndex = 3;
+        public HomePage getDataForHomePage(HomePage homePage)
         {
-            performers = _context.Performer.ToList();
-            return performers;
+            homePageInit(homePage);
+            return indexInitNumOfObject(homePage, numOfObjectToReturnInIndex);
         }
+
         public void addPerformersToParty(Party party, List<int> PerformersId)
         {
             for (int i = 0; i < PerformersId.Count; i++)
@@ -76,50 +107,42 @@ namespace PartWebApp2.Services
             _context.SaveChanges();
         }
 
+        const string imageIsNull = "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id1138179183?k=6&m=1138179183&s=612x612&w=0&h=prMYPP9mLRNpTp3XIykjeJJ8oCZRhb2iez6vKs8a8eE=";
+        public string defaultImageIfIsNull(string Url)
+        {
+            if (String.IsNullOrEmpty(Url))
+            {
+                Url = imageIsNull;
+            }
+            return Url;
+        }
         public void addImageToParty(Party party, string Url)
         {
             PartyImage partyImage = new PartyImage();
             partyImage.imageUrl = Url;
-            partyImage.Party = party;
             partyImage.PartyId = party.Id;
+            partyImage.Party = party;
             _context.PartyImage.Add(partyImage);
             party.partyImage = partyImage;
             _context.Party.Add(party);
         }
-        public async Task<PartyImage> createPartyImageAsync([Bind("Id,imageUrl,PartyId")] PartyImage partyImage)
-        {
-            _context.Add(partyImage);
-            await _context.SaveChangesAsync();
 
-            return partyImage;
+
+
+
+
+        const int numOfMostPopularPartyToReturn = 5;
+        public IEnumerable<Party> mostPopularParties()
+        {
+            List<Party> mostPopularParties = convertContextPartyToList();
+            return mostPopularParties.OrderByDescending(u => u.users.Count).Take(numOfMostPopularPartyToReturn);
         }
 
-        public List<Party> mostPopularParties()
+        const int numOfSortPartiesAreaTypeForEach = 3;
+        public IEnumerable<Party> sortByAreaType(int AreaType)
         {
-            List<Party> mostPopular = new List<Party>();
-            var sortPartiesByCountOfUsers = _context.Party.Include(p => p.area).Include(a => a.club).Include(t => t.genre).ToList();
-            sortPartiesByCountOfUsers.OrderByDescending(u => u.users.Count());
-            List<Party> mostPopularParties = new List<Party>();
-            for (var i = 0; i < 5; i++)
-            {
-                mostPopularParties.Add(sortPartiesByCountOfUsers[i]);
-            }
-            return mostPopularParties;
-        }
-
-        public List<Party> sortByAreaType(int AreaType)
-        {
-            int i = 0;
-            List<Party> sotyByArea = new List<Party>();
-            var parties = _context.Party.Include(p => p.area).Include(a => a.club).Include(t => t.genre).ToList();
-            while (sotyByArea.Count() <= 5 && i < parties.Count())
-            {
-                if (parties[i].area.Id == AreaType)
-                {
-                    sotyByArea.Add(parties[i]);
-                }
-            }
-            return sotyByArea;
+            List<Party> sotyByArea = convertContextPartyToList();
+            return sotyByArea.OrderByDescending(p => p.area.Id == AreaType).Take(numOfMostPopularPartyToReturn);
         }
 
 
@@ -138,25 +161,73 @@ namespace PartWebApp2.Services
             }
         }
 
-        public async void addPerformersToParty(Party party, Performer performer)
+        public int calcAvailableTickets(Party party)
         {
-            var per = _context.Performer.FirstOrDefault(per => per.SpotifyId == performer.SpotifyId);
-            var p = _context.Party.FirstOrDefault(p => p.Id == party.Id);
-            if (p != null && per != null)
-            {
-                var u = _context.Performer.FirstOrDefault(u => u.SpotifyId == u.SpotifyId);
-                if (u.parties == null)
-                {
-                    u.parties = new List<Party>();
-                }
-                if (p.performers == null)
-                {
-                    p.performers = new List<Performer>();
-                }
-                u.parties.Add(party);
-                p.performers.Add(u);
-            }
-            await _context.SaveChangesAsync();
+            return party.maxCapacity - party.ticketsPurchased;
         }
+
+        public string areaTypeToString(AreaType type)
+        {
+            if (type.Equals(AreaType.Center))
+            {
+                return "Center";
+            }
+            if (type.Equals(AreaType.Hasharon))
+            {
+                return "Hasharon";
+            }
+            if (type.Equals(AreaType.North))
+            {
+                return "North";
+            }
+            if (type.Equals(AreaType.South))
+            {
+                return "South";
+            }
+
+            return null;
+        }
+        public void addTicketsCountToParty(int id, int numOfTickets, User user)
+        {
+            var currentParty = _context.Party.FirstOrDefault(p => p.Id == id);
+            if (calcAvailableTickets(currentParty) >= numOfTickets)
+            {
+                currentParty.ticketsPurchased += numOfTickets;
+                currentParty.users.Add(user);
+                _context.Update(currentParty);
+            }
+        }
+
+        public int CalculateAge(DateTime dateOfBirth)
+        {
+            int age = DateTime.Now.Year - dateOfBirth.Year;
+            if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
+            {
+                age = age - 1;
+            }
+            return age;
+        }
+
+
+        //public async void addPerformersToParty(Party party, Performer performer)
+        //{
+        //    var per = _context.Performer.FirstOrDefault(per => per.SpotifyId == performer.SpotifyId);
+        //    var p = _context.Party.FirstOrDefault(p => p.Id == party.Id);
+        //    if (p != null && per != null)
+        //    {
+        //        var u = _context.Performer.FirstOrDefault(u => u.SpotifyId == u.SpotifyId);
+        //        if (u.parties == null)
+        //        {
+        //            u.parties = new List<Party>();
+        //        }
+        //        if (p.performers == null)
+        //        {
+        //            p.performers = new List<Performer>();
+        //        }
+        //        u.parties.Add(party);
+        //        p.performers.Add(u);
+        //    }
+        //    await _context.SaveChangesAsync();
+        //}
     }
 }

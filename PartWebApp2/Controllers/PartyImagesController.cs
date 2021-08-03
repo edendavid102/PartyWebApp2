@@ -57,7 +57,7 @@ namespace PartWebApp2.Controllers
         public IActionResult Create()
         {
             ViewData["PartyId"] = new SelectList(_context.Party, "Id", "Id");
-            return View();
+            return View(nameof(Edit));
         }
 
         // POST: PartyImages/Create
@@ -66,8 +66,9 @@ namespace PartWebApp2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, producer")]
-        public async Task<IActionResult> Create([Bind("Id,imageUrl,PartyId")] PartyImage partyImage)
+        public async Task<IActionResult> Create([Bind("Id,imageUrl")] PartyImage partyImage, Party image)
         {
+          
             if (ModelState.IsValid)
             {
                 _context.Add(partyImage);
@@ -136,7 +137,7 @@ namespace PartWebApp2.Controllers
             ViewData["PartyId"] = new SelectList(_context.Party, nameof(partyImage.PartyId), nameof(partyImage.PartyId), partyImage.Party.name);
             return View(partyImage);
         }
-
+        
         // GET: PartyImages/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

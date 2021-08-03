@@ -14,7 +14,7 @@ namespace PartWebApp2
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-        
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -23,6 +23,5 @@ namespace PartWebApp2
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
     }
 }

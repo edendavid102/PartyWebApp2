@@ -29,17 +29,46 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    @if (ViewBag.UserType != "Manager" && ViewBag.PageName == "Index")
+                    {
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    }
                     @if (Context.User != null && Context.User.Claims != null && Context.User.Claims.Count() > 0)
                     {
+                        if (ViewBag.UserType == "Manager")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" style="background-color: black;" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">By Area</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="background-color: black;">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="areaCenterId">Center</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="areaNorthId">North</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="areaSouthId">South</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="areaHasharonId">Hasharon</a>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Users" asp-action="Index">All Users</a>
+                            </li>
+                            <li>
+
+                                <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties">Statistics</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties">My Events</a>
+                            </li>
+                        }
                         <li>
-                            <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties">My Parties</a>
+                            <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="HomePage">All Events</a>
                         </li>
                         <li>
                             <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                         </li>
+
                     }
                     else
                     {
@@ -56,18 +85,16 @@
                         <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                         <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5v2z" />
                     </svg>
-                    <aa>@Context.User.Identity.Name</aa>
+                    <aa>@ViewBag.UserFullName - @ViewBag.UserType</aa>
                 </div>
             }
         </div>
     </nav>
-
     <div>
         <main>
             @RenderBody()
         </main>
     </div>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
