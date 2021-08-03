@@ -18,6 +18,7 @@ namespace PartWebApp2.Models
             AreaInitialize(context);
             GenreInitialize(context);
             ClubInitialize(context);
+            AdminInitialize(context);
         }
         public static void AreaInitialize(PartyWebAppContext context)
         {
@@ -147,6 +148,39 @@ namespace PartWebApp2.Models
                     LocationId = "ChIJs0wtygNuABURy9ZGm-iVVpc",
                     Name = "Selina Eilat",
                     Parties = new List<Party>(),
+                }
+                );
+            context.SaveChanges();
+        }
+        public static void AdminInitialize(PartyWebAppContext context)
+        {
+            if (context.User.Any())
+            {
+                return;
+            }
+
+            context.User.AddRange(
+                new User
+                {
+                    firstName = "Eden",
+                    lastName = "David",
+                    password = "123456",
+                    email = "edendavid102@gmail.com",
+                    birthDate = new DateTime(1998, 7, 1),
+                    Type = UserType.Admin,
+                    parties = new List<Party>(),
+
+                },
+                new User
+                {
+                    firstName = "admin",
+                    lastName = "admin",
+                    password = "admin",
+                    email = "Admin@gmail.com",
+                    birthDate = new DateTime(),
+                    Type = UserType.Admin,
+                    parties = new List<Party>(),
+
                 }
                 );
             context.SaveChanges();

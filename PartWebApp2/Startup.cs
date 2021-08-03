@@ -36,6 +36,8 @@ namespace PartWebApp2
                             options.UseSqlServer(Configuration.GetConnectionString("PartyWebAppContext")));
 
             services.AddTransient<ISpotifyClientService, SpotifyClientService>();
+            services.AddTransient<IManageService, ManagerService>();
+
             services.AddTransient<IFacebookService, FacebookService>();
 
             services.AddSession(options => 
