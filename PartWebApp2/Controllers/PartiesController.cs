@@ -18,18 +18,45 @@ namespace PartWebApp2.Controllers
         private readonly PartyWebAppContext _context;
         private readonly PartiesService _partiesService;
         private readonly ISpotifyClientService _spotifyClientService;
-
-        public PartiesController(PartyWebAppContext context, PartiesService service, ISpotifyClientService spotifyClientService)
+    public PartiesController(PartyWebAppContext context, PartiesService service, ISpotifyClientService spotifyClientService)
         {
             _context = context;
             _partiesService = service;
             _spotifyClientService = spotifyClientService;
         }
 
+        public int findCurrentUserId()
+        {
+            return Int32.Parse(HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
+        public void initTypeUserToViewData(User currentUser)
+        {
+            ViewData["UserFullName"] = currentUser.firstName + " " + currentUser.lastName;
+            if (currentUser.Type == UserType.Admin)
+            {
+                ViewData["UserType"] = "Manager";
+            }
+            else if (currentUser.Type == UserType.producer)
+            {
+                ViewData["UserType"] = "Producer";
+            }
+            else
+            {
+                ViewData["UserType"] = "Client";
+            }
+        }
+        public User returnCurrentUser()
+        {
+            var currentUser = _context.User.FirstOrDefault(u => u.Id == findCurrentUserId());
+            initTypeUserToViewData(currentUser);
+            return currentUser;
+        }
         // GET: Parties
-        [Authorize]
+         [Authorize]
         public async Task<IActionResult> Index()
         {
+            ViewData["PageName"] = "Index";
+            initTypeUserToViewData(returnCurrentUser());
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
@@ -46,11 +73,14 @@ namespace PartWebApp2.Controllers
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
 
+            ViewData["PageName"] = "All Parties";
+            initTypeUserToViewData(returnCurrentUser());
             var partyWebAppContext = _context.Party.Include(p => p.area)
                         .Include(p => p.club)
                         .Include(p => p.genre)
                         .Include(p => p.partyImage)
                         .Include(p => p.performers);
+
             return View(await partyWebAppContext.ToListAsync());
         }
 
@@ -71,6 +101,7 @@ namespace PartWebApp2.Controllers
             ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
 
+            initTypeUserToViewData(returnCurrentUser());
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
@@ -112,15 +143,16 @@ namespace PartWebApp2.Controllers
             return View("HomePage", await PartyWebAppContext.ToListAsync());
         }
 
+
         [Authorize]
         public async Task<IActionResult> findPartyInMyParties(string partyName)
         {
-            var currentUserId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            initTypeUserToViewData(returnCurrentUser());
             var partyWebAppContext = _context.Party.Include(p => p.area)
                 .Include(p => p.club)
                 .Include(p => p.genre)
                 .Include(p => p.partyImage)
-                .Include(p => p.performers).Where(p => p.ProducerId.Equals(currentUserId));
+                .Include(p => p.performers).Where(p => p.ProducerId.Equals(findCurrentUserId()));
 
             return View("Index", await partyWebAppContext.ToListAsync());
         }
@@ -128,35 +160,30 @@ namespace PartWebApp2.Controllers
         [Authorize]
         public async Task<IActionResult> myParties()
         {
-            var currentUserId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = _context.User.FirstOrDefault(u => u.Id == Int32.Parse(currentUserId));
-            const int clientPermissionLevel = 0;
-            Boolean isProducer = currentUser.Type > clientPermissionLevel;
+            ViewData["PageName"] = "My Parties";
+            initTypeUserToViewData(returnCurrentUser());
+            const UserType clientPermissionLevel = UserType.Client;
+
+            var partyWebAppContext = _context.Party.Include(p => p.area)
+               .Include(p => p.club)
+               .Include(p => p.genre)
+               .Include(p => p.partyImage)
+               .Include(p => p.performers);
+
+            Boolean isProducer = returnCurrentUser().Type > clientPermissionLevel;
             if (isProducer)
             {
-                var partyWebAppContext = _context.Party.Include(p => p.area)
-                .Include(p => p.club)
-                .Include(p => p.genre)
-                .Include(p => p.partyImage)
-                .Include(p => p.performers)
-                .Where(p => p.ProducerId == Int32.Parse(currentUserId));
-                return View(await partyWebAppContext.ToListAsync());
+                partyWebAppContext.Where(p => p.ProducerId == findCurrentUserId());
             }
             else
             {
-                var partyWebAppContext = _context.Party.Include(p => p.area)
-                .Include(p => p.club)
-                .Include(p => p.genre)
-                .Include(p => p.partyImage)
-                .Include(p => p.performers)
-                .Where(p => p.users.All(u => u.Id == Int32.Parse(currentUserId)));
-
-                return View("homePage", await partyWebAppContext.ToListAsync());
+                partyWebAppContext.Where(p => p.users.Contains(returnCurrentUser()));
             }
+            return View("HomePage", await partyWebAppContext.ToListAsync());
         }
 
         [Authorize]
-        public List<Party> mostPopularParties()
+        public IEnumerable<Party> mostPopularParties()
         {
             return (_partiesService.mostPopularParties());
         }
@@ -164,6 +191,7 @@ namespace PartWebApp2.Controllers
         // GET: Parties/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            initTypeUserToViewData(returnCurrentUser());
             if (id == null)
             {
                 return NotFound();
@@ -199,13 +227,11 @@ namespace PartWebApp2.Controllers
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
             ViewData["PerformersId"] = new SelectList(_context.Set<Performer>(), "Id", "SpotifyId");
-           
+
             return View();
         }
 
-        // POST: Parties/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, producer")]
@@ -213,18 +239,49 @@ namespace PartWebApp2.Controllers
         {
             if (ModelState.IsValid)
             {
-                var producerId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                party.ProducerId = Int32.Parse(producerId);
+                party.ProducerId = findCurrentUserId();
+
                 party.ticketsPurchased = 0;
                 party.performers = new List<Performer>();
                 _partiesService.addPerformersToParty(party, performersId);
                 _partiesService.addImageToParty(party, imageUrl);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(party);
         }
-        // GET: Parties/Edit/5
+        public async Task<IActionResult> Payment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var party = await _context.Party.FindAsync(id);
+            if (party == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
+            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
+            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
+
+            return View(party);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Payment(int partyId, int numOfTickets)
+        {
+            var currentUserId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = _context.User.FirstOrDefault(u => u.Id == Int32.Parse(currentUserId));
+            _partiesService.addTicketsCountToParty(partyId, numOfTickets, currentUser);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(myParties));
+        }
+
         [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -241,13 +298,10 @@ namespace PartWebApp2.Controllers
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
             ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
-            
+
             return View(party);
         }
 
-        // POST: Parties/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, producer")]
@@ -257,30 +311,37 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+            if (returnCurrentUser().Id == party.ProducerId || returnCurrentUser().Type == UserType.Admin)
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(party);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PartyExists(party.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(party);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!PartyExists(party.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
-                }
-                return RedirectToAction(nameof(myParties));
+                        return RedirectToAction(nameof(myParties));
+                    }
+                    ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
+                ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
+                ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
+                return View(party);
             }
-            ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
-            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
-            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
-
+            else
+            {
+                ViewData["Error"] = "You Cant Edit this Party, its not yours!";
+            }
             return View(party);
         }
 

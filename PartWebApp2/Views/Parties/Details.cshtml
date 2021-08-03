@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "_OtherPages";
+    Layout = "_HomeLayout";
 }
 
 <head>
@@ -156,5 +156,14 @@
                 </div>
             </div>
 
+            <table class="aboutitem" style="border: cornflowerblue 0px solid; width: 90%;">
+                <tr>
+                    <th style="background-color: cornflowerblue;">Ticket Status</th>
+                </tr>
+                <tr>
+                    <td> @Html.DisplayFor(model => model.ticketsPurchased) / @Html.DisplayFor(model => model.maxCapacity)</td>
+                </tr>
+            </table>
+            <a class="btn btn-success buytickets" asp-action="BuyTickets" asp-route-id="@Model.Id">Buy Tickets</a>
         </div>
     </div>
