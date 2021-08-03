@@ -1,5 +1,4 @@
 ﻿@model PartWebApp2.Models.User
-
 @{
     ViewData["Title"] = "Details";
 }
@@ -148,86 +147,5 @@
                 <a asp-action="Delete" asp-route-id="@Model.Id">Delete Profile</a>
             </div>
         </div>
-        @*<div class="screen__hr"></div>*@
-        @*<div class="screen__list">
-                <ul>
-                    <li>
-                        <div class="screen__list__details">
-                            <h4>@Model.Type</h4>
-                            @if (Model.Type == UserType.producer)
-                            {
-                                <h5 style="text-align: center;">Active Parties Create: @Model.parties.Count</h5>
-                            }
-                        </div>
-                    </li>
-                </ul>
-            </div>*@
     </div>
 </body>
-@*<div class="card">
-        <div class="card__image">
-            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
-        </div>
-        <div class="card__name">
-            <p>@Model.firstName @Model.lastName</p>
-        </div>
-        <p>@Model.Type</p>
-        <p>@Model.email</p>
-        <p>@Model.birthDate</p>
-        @if (Model.Type == UserType.producer)
-        {
-            <p>@Model.parties.Count</p>
-        }
-        <div class="card__button">
-            <a asp-action="Edit" asp-route-id="@Model.Id"><p>Edit Profile</p></a> |
-            <a asp-action="Delete" asp-route-id="@Model.Id">Delete User</a>
-        </div>
-    </div>*@
-
-
-@*<div>
-        <h4>User</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.firstName)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.firstName)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.lastName)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.lastName)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.password)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.password)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.email)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.email)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.birthDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.birthDate)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Type)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Type)
-            </dd>
-        </dl>
-    </div>*@
-@*<div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>*@

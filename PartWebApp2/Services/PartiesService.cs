@@ -133,6 +133,7 @@ namespace PartWebApp2.Services
         }
         public void addImageToParty(Party party, string Url)
         {
+            Url = defaultImageIfIsNull(Url);
             PartyImage partyImage = new PartyImage();
             partyImage.imageUrl = Url;
             partyImage.PartyId = party.Id;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DevTrends.MvcDonutCaching;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -245,14 +244,13 @@ namespace PartWebApp2.Controllers
                 party.ticketsPurchased = 0;
                 party.performers = new List<Performer>();
                 _partiesService.addPerformersToParty(party, performersId);
-                imageUrl = _partiesService.defaultImageIfIsNull(imageUrl);
                 _partiesService.addImageToParty(party, imageUrl);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-
+            return View(party);
+        }
         public async Task<IActionResult> Payment(int? id)
         {
             if (id == null)
