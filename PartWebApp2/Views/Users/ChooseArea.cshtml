@@ -1,0 +1,30 @@
+﻿@model PartWebApp2.Models.User
+
+@{
+    ViewData["Title"] = "ChooseArea";
+    Layout = "_LoginLayout";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/LoginReg.css" />
+</head>
+
+<div class="login-box">
+    <h2>Please Choose</h2>
+    <form asp-action="AreaPage">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <select id="sel" name="areaId" asp-items="ViewBag.Areas" onchange='this.form.submit()'></select>
+    </form>
+    @if (ViewBag.Error != null)
+    {
+        <div class="text-danger">@ViewBag.Error</div>
+    }
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    function DoSubmit(sel) {
+        if (sel.val() != '0') this.form.submit();
+    }
+</script>

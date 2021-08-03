@@ -14,7 +14,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using PartWebApp2.Services;
-using PartyWebApp2.Services;
 
 namespace PartWebApp2
 {

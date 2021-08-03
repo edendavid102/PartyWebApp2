@@ -18,6 +18,10 @@ body, div, input, select, textarea, p {
 
 }
 
+.field-validation-error{
+    font-size: 12px;
+}
+
 h1 {
     position: absolute;
     margin: 0;
