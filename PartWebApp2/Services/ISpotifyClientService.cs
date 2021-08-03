@@ -12,5 +12,7 @@ namespace PartWebApp2.Services
 
         Task<FullArtist> GetArtist(string artistId);
 
+        Task<string> getArtistIdBySearchParams(string searchParams);
+
     }
 }

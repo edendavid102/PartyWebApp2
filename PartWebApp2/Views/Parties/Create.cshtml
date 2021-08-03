@@ -7,16 +7,7 @@
 
 <head>
     <link rel="stylesheet" href="~/css/CreatePages.css" />
-    <script>
-        function addField() {
-            var addedFieldCount = $('input.dynamic-field').length;
-            if (addedFieldCount == 70) {//But you should check it on the server side too.
-                alert('No more field allowed');
-                return;
-            }
-            $('#performersFieldContainer').append('<input name="performersId"/>');
-        }
-    </script>
+    <script src="~/js/CreateParty.js"></script>
 </head>
 <body>
     <div class="testbox">
@@ -86,15 +77,24 @@
                     <i class="fas"></i>
                 </div>
                 <div class="item col-md-12">
-                    <input name="imageUrl" placeholder="URL" />
+                    Party Image Url
+                    <input name="imageUrl" placeholder="URL" type="url"/>
                     <i class="fas"></i>
                 </div>
                 <div class="item col-md-12">
                     Performers Spotify Id
                     <div id="performersFieldContainer">
-                        <input name="performersId" />
+                        <input required id="performer-name" onchange="getPerformerIdByName(this)"/>
                     </div>
                     <button type="button" onclick="addField()">Add More Performers!</button>
+                    <i class="fas"></i>
+                </div>
+
+                <div class="item col-md-12">
+                    Write something to facebook!
+                    <div>
+                        <input id="facebookMessageInput" name="facebookMessage" />
+                    </div>
                     <i class="fas"></i>
                 </div>
 
@@ -106,7 +106,7 @@
                         <a asp-action="Index">Previous</a>
                     </button>
                     <p class="col-md-6"></p>
-                    <button type="submit" value="Create" class="col-md-3">Create Party</button>
+                    <button onclick="postToFacebook()" type="submit" value="Create" class="col-md-3">Create Party</button>
                 </div>
             </div>
         </form>

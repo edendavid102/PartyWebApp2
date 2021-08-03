@@ -149,7 +149,6 @@ namespace PartWebApp2.Controllers
             ViewData["Genres"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
-            ViewData["PerformersId"] = new SelectList(_context.Set<Performer>(), "Id", "SpotifyId");
            
             return View();
         }
@@ -173,6 +172,9 @@ namespace PartWebApp2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
             return View(party);
         }
         // GET: Parties/Edit/5
@@ -327,6 +329,12 @@ namespace PartWebApp2.Controllers
             _context.Party.Remove(party);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<string> GetArtistIdBySearchParams(string queryParams)
+        {
+            return await _spotifyClientService.getArtistIdBySearchParams(queryParams);
         }
 
         private bool PartyExists(int id)
