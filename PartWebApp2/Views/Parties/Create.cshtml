@@ -7,6 +7,16 @@
 
 <head>
     <link rel="stylesheet" href="~/css/CreatePages.css" />
+    <script>
+        function addField() {
+            var addedFieldCount = $('input.dynamic-field').length;
+            if (addedFieldCount == 70) {//But you should check it on the server side too.
+                alert('No more field allowed');
+                return;
+            }
+            $('#performersFieldContainer').append('<input name="performersId"/>');
+        }
+    </script>
 </head>
 <body>
     <div class="testbox">
@@ -80,8 +90,11 @@
                     <i class="fas"></i>
                 </div>
                 <div class="item col-md-12">
-                    Performers
-                    <select name="performersId" asp-items="ViewBag.PerformersId"></select>
+                    Performers Spotify Id
+                    <div id="performersFieldContainer">
+                        <input name="performersId" />
+                    </div>
+                    <button type="button" onclick="addField()">Add More Performers!</button>
                     <i class="fas"></i>
                 </div>
 

@@ -80,31 +80,46 @@ namespace PartWebApp2.Services
             return indexInitNumOfObject(homePage, numOfObjectToReturnInIndex);
         }
 
-        public void addPerformersToParty(Party party, List<int> PerformersId)
+        public void addPerformersToParty(Party party, List<string> perfomersSpotifyIds)
         {
-            for (int i = 0; i < PerformersId.Count; i++)
+            foreach (string spotifyId in perfomersSpotifyIds)
             {
-                if (_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties == null)
+                if (party.performers == null) party.performers = new List<Performer>();
+                var existingPerformer = _context.Performer.FirstOrDefault(performer => performer.SpotifyId == spotifyId);
+                bool isPerformerExistInDb = existingPerformer != null;
+                if (isPerformerExistInDb)
                 {
-                    _context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties = new List<Party>();
-                }
-                if (_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties.FirstOrDefault(p => p.Id == party.Id) == null)
+                    addExistingPerformerToParty(party, existingPerformer);
+                } else
                 {
-                    _context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]).parties.Add(party);
+                    var newPerformer = new Performer {
+                        SpotifyId = spotifyId,
+                        parties = new List<Party>()
+                    };
+                    addNewPerformerToParty(party, newPerformer);
                 }
-
-                if (_context.Party.FirstOrDefault(p => p.Id == party.Id).performers == null)
-                {
-                    _context.Party.FirstOrDefault(p => p.Id == party.Id).performers = new List<Performer>();
-                }
-                if (_context.Party.FirstOrDefault(p => p.Id == party.Id).performers.FirstOrDefault(p => p.Id == PerformersId[i]) == null)
-                {
-                    _context.Party.FirstOrDefault(p => p.Id == party.Id).performers
-       .Add(_context.Performer.FirstOrDefault(p => p.Id == PerformersId[i]));
-                }
-                _context.SaveChanges();
             }
-            _context.SaveChanges();
+        }
+
+        public void addNewPerformerToParty(Party party, Performer performer)
+        {
+            performer.parties.Add(party);
+            party.performers.Add(performer);
+            _context.Performer.Add(performer);
+            _context.Add(party);
+        }
+
+        public void addExistingPerformerToParty(Party party, Performer performer)
+        {
+            if (performer.parties != null) performer.parties.Add(party);
+            else
+            {
+                performer.parties = new List<Party>();
+                performer.parties.Add(party);
+            }
+            party.performers.Add(performer);
+            _context.Update(performer);
+            _context.Add(party);
         }
 
         const string imageIsNull = "https://media.istockphoto.com/vectors/no-image-available-sign-vector-id1138179183?k=6&m=1138179183&s=612x612&w=0&h=prMYPP9mLRNpTp3XIykjeJJ8oCZRhb2iez6vKs8a8eE=";
@@ -209,25 +224,5 @@ namespace PartWebApp2.Services
         }
 
 
-        //public async void addPerformersToParty(Party party, Performer performer)
-        //{
-        //    var per = _context.Performer.FirstOrDefault(per => per.SpotifyId == performer.SpotifyId);
-        //    var p = _context.Party.FirstOrDefault(p => p.Id == party.Id);
-        //    if (p != null && per != null)
-        //    {
-        //        var u = _context.Performer.FirstOrDefault(u => u.SpotifyId == u.SpotifyId);
-        //        if (u.parties == null)
-        //        {
-        //            u.parties = new List<Party>();
-        //        }
-        //        if (p.performers == null)
-        //        {
-        //            p.performers = new List<Performer>();
-        //        }
-        //        u.parties.Add(party);
-        //        p.performers.Add(u);
-        //    }
-        //    await _context.SaveChangesAsync();
-        //}
     }
 }
