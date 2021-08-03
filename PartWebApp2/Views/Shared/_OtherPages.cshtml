@@ -22,11 +22,18 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
+                    
                     <li>
-                        <a asp-area="" asp-controller="Parties" asp-action="MyParties">My Parties</a>
+                        <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="HomePage"> Events </a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="Parties" asp-action="HomePage">More Parties</a>
+                        <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Clubs" asp-action="Index">All CLubs </a>
+                    </li>
+                    <li>
+                        <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties"> My Events </a>
+                    </li>
+                    <li>
+                        <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                     </li>
                 </ul>
             </div>
