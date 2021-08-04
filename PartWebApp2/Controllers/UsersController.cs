@@ -12,16 +12,133 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using PartWebApp2.Services;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PartWebApp2.Controllers
 {
     public class UsersController : Controller
     {
         private readonly PartyWebAppContext _context;
+        private readonly PartiesService _partiesService;
 
-        public UsersController(PartyWebAppContext context)
+        public UsersController(PartyWebAppContext context, PartiesService service)
         {
             _context = context;
+            _partiesService = service;
+        }
+
+        public int findCurrentUserId()
+        {
+            return Int32.Parse(HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
+        public void initTypeUserToViewData(User currentUser)
+        {
+            ViewData["UserFullName"] = currentUser.firstName + " " + currentUser.lastName;
+            if (currentUser.Type == UserType.Admin)
+            {
+                ViewData["UserType"] = "Manager";
+            }
+            else if (currentUser.Type == UserType.producer)
+            {
+                ViewData["UserType"] = "Producer";
+            }
+            else
+            {
+                ViewData["UserType"] = "Client";
+            }
+        }
+        public User returnCurrentUser()
+        {
+            var currentUser = _context.User.FirstOrDefault(u => u.Id == findCurrentUserId());
+            initTypeUserToViewData(currentUser);
+            return currentUser;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            initTypeUserToViewData(returnCurrentUser());
+            var result = (from o in _context.Party
+                          group o by o.areaId into o
+                          orderby o.Sum(c => c.areaId) descending
+                          select new { o.Key, Total = o.Sum(c => c.ticketsPurchased) }).FirstOrDefault();
+
+            var mostPopularArea = _context.Area.Find(result.Key);
+
+            if (mostPopularArea != null)
+            {
+                ViewData["MostPopularArea"] = _partiesService.areaTypeToString(mostPopularArea.Type);
+            }
+
+            var partyWebAppContext = _context.User.Include(u => u.parties);
+            return View(await partyWebAppContext.ToListAsync());
+        }
+
+        const int centerId = 1;
+        const int northId = 2;
+        const int southId = 3;
+        const int hasharonId = 4;
+
+        public Task<IActionResult> areaCenterId()
+        {
+            return AreaPage(centerId);
+        }
+        public Task<IActionResult> areaNorthId()
+        {
+            return AreaPage(northId);
+        }
+        public Task<IActionResult> areaSouthId()
+        {
+            return AreaPage(southId);
+        }
+        public Task<IActionResult> areaHasharonId()
+        {
+            return AreaPage(hasharonId);
+        }
+
+        public async Task<IActionResult> AreaPage(int areaId)
+        {
+            initTypeUserToViewData(returnCurrentUser());
+            var q = from a in _context.Area
+                    join p in _context.Party on
+                    a.Id equals p.areaId
+                    where a.Id == areaId
+                    select a;
+
+            Area area = q.Include(a => a.Parties).FirstOrDefault();
+            if (area != null)
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            List<Party> parties = area.Parties;
+            List<PartyImage> images = new List<PartyImage>();
+            foreach (Party p in parties)
+            {
+                PartyImage image = (_context.PartyImage.Where(i => i.PartyId.Equals(p.Id)).FirstOrDefault());
+                images.Add(image);
+            }
+            ViewData["images"] = images;
+            ViewData["AreaName"] = _partiesService.areaTypeToString(area.Type);
+            Tuple<List<Party>, List<PartyImage>> tuple = new Tuple<List<Party>, List<PartyImage>>(parties, images);
+            return View(nameof(AreaPage), tuple);
+        }
+
+        public void MostPopularArea()
+        {
+            var result = (from o in _context.Party
+                          group o by o.areaId into o
+                          orderby o.Sum(c => c.areaId) descending
+                          select new { o.Key, Total = o.Sum(c => c.areaId) }).FirstOrDefault();
+
+            var mostPopularArea = _context.Area.Find(result.Key);
+
+            if (mostPopularArea != null)
+            {
+                ViewData["MostPopularArea"] = _partiesService.areaTypeToString(mostPopularArea.Type);
+                ViewData["CountOfPartiesInMostPopularArea"] = mostPopularArea.Parties.Count();
+            }
         }
 
         public async Task<IActionResult> Logout()
@@ -29,7 +146,6 @@ namespace PartWebApp2.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
-
 
         private async void Signin(User account)
         {
@@ -137,7 +253,7 @@ namespace PartWebApp2.Controllers
         {
             if (ModelState.IsValid)
             {
-                var q = _context.User.FirstOrDefault(u => u.email == user.email); 
+                var q = _context.User.FirstOrDefault(u => u.email == user.email);
 
                 if (q == null)
                 {
@@ -159,5 +275,140 @@ namespace PartWebApp2.Controllers
             }
             return View(user);
         }
+
+        // GET: Users/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User.Include(u => u.parties)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // GET: Users/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Users/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            List<SelectListItem> TypesUser = new List<SelectListItem>();
+            TypesUser.Add(new SelectListItem() { Text = "Client", Value = "0" });
+            TypesUser.Add(new SelectListItem() { Text = "Producer", Value = "1" });
+            TypesUser.Add(new SelectListItem() { Text = "Admin", Value = "2" });
+
+            ViewData["TypesUser"] = TypesUser;
+
+            initTypeUserToViewData(returnCurrentUser());
+           
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Users/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
+        {
+            initTypeUserToViewData(returnCurrentUser());
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        // GET: Users/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: Users/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.User.Any(e => e.Id == id);
+        }
     }
+
 }

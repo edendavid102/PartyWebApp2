@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "homePage";
-    Layout = "_OtherPages";
+    Layout = "_HomeLayout";
 }
 
 <head>
@@ -10,7 +10,18 @@
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
     <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
-        <h1>All Parties</h1>
+        @if (ViewBag.UserType != "Client")
+        {
+            <div class="col-2">
+                <a asp-action="Create" style="text-decoration: none;"
+                   class="button button--moema button--text-thick button--text-upper button--size-s">Add New Party</a>
+            </div>
+        }
+
+        <h1>
+            @if (ViewBag.PageName != "My Parties") { ViewBag.PageName = "All Parties"; }
+            @ViewBag.PageName
+        </h1>
         <h3>Time To Celabrate</h3>
         <form asp-action="findParty">
             <div class="input-group">
@@ -74,7 +85,7 @@
         <a asp-action="Create" class="col-md-2 btn-circle">Add New Party</a>
     </div>
     <div id="portfolio" class="container-fluid text-center">
-        <h1>All Parties</h1>
+        <h1>@ViewBag.PageName</h1>
         @{ var col = "color1"; var i = 0;}
         @foreach (var item in Model)
         {
@@ -98,6 +109,11 @@
                             @Html.DisplayFor(modelItem => item.genre.Type)
                         </h5>
                         <a asp-action="Details" asp-route-id="@item.Id">View More</a>
+                        @if (ViewBag.UserType != "Client")
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">| Edit |</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     </div>
                 </div>
             </div>

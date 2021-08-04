@@ -20,6 +20,19 @@ namespace PartWebApp2.Services
             _spotify = new SpotifyClient(config);
         }
 
+        public async Task<string> getArtistIdBySearchParams(string searchParams)
+        {
+            var searchResponse = await _spotify.Search.Item(new SearchRequest(SearchRequest.Types.Artist, searchParams)
+            {
+                Limit = 1,
+
+            });
+            if (searchResponse.Artists.Items.Count > 0) return searchResponse.Artists.Items.First().Id;
+            else return "NO_RESULT";
+
+        }
+
+
         public async Task<FullArtist> GetArtist(string artistId)
         {
             var artist = await _spotify.Artists.Get(artistId);

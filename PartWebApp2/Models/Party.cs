@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CustomDataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,28 @@ namespace PartWebApp2.Models
 {
     public class Party
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "Party Name")]
+        [StringLength(25, MinimumLength = 3)]
+        [Required]
         public string name { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Event Date")]
+        [CurrentDate]
+        [Required]
         public DateTime eventDate { get; set; }
 
         [Display(Name = "Minimal Age")]
+        [Range(18, 67)]
+        [Required]
         public int minimalAge { get; set; }
 
         [DataType(DataType.Time)]
         [Display(Name = "Open Doors")]
+        [Required]
         public DateTime startTime { get; set; }
         [Display(Name = "Tickets purchased")]
         public int ticketsPurchased { get; set; }
@@ -42,9 +51,12 @@ namespace PartWebApp2.Models
 
 
         [Display(Name = "Maximum Capacity")]
+        [Required]
+        [Range(30, 30000)]
         public int maxCapacity { get; set; }
-
         [Display(Name = "Price in NIS")]
+        [Required]
+        [Range(0, 2000)]
         public double price { get; set; }
 
         //Many To Many 

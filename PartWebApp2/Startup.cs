@@ -14,7 +14,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using PartWebApp2.Services;
-using PartyWebApp2.Services;
 
 namespace PartWebApp2
 {
@@ -36,6 +35,8 @@ namespace PartWebApp2
                             options.UseSqlServer(Configuration.GetConnectionString("PartyWebAppContext")));
 
             services.AddTransient<ISpotifyClientService, SpotifyClientService>();
+            services.AddTransient<IManageService, ManagerService>();
+
             services.AddTransient<IFacebookService, FacebookService>();
 
             services.AddSession(options => 
