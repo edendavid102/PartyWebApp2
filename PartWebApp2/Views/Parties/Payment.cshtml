@@ -226,6 +226,7 @@
             <h2 style="font-size: 35px;">@Model.name Tickets</h2>
         </div>
         <form asp-action="Payment">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <span id="card-header">Count Of Ticket's:</span>
             <div class="row row-1">
                 <div class="col-2"> </div>

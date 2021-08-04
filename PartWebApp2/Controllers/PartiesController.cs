@@ -281,13 +281,6 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-            //var party = await _context.Party
-            //    .Include(p => p.area)
-            //    .Include(p => p.club)
-            //    .Include(p => p.genre)
-            //    .Include(p => p.partyImage)
-            //    .Include(p => p.performers)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
 
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
@@ -309,10 +302,22 @@ namespace PartWebApp2.Controllers
             }
             if (numOfTickets > 0)
             {
-                _partiesService.addTicketsCountToParty(id, returnCurrentUser(), numOfTickets);
+                _partiesService.addTicketsCountToParty(id, numOfTickets, returnCurrentUser());
                 _context.Update(party);
-                await _context.SaveChangesAsync();
+                _context.Update(returnCurrentUser());
+                if(!(party.users.Contains(returnCurrentUser()) || returnCurrentUser().parties.Contains(party)))
+                {
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return RedirectToAction("AccessDenied", "Users");
+                }
                 return RedirectToAction(nameof(myParties));
+            }
+            else
+            {
+                ViewData["Error"] = "One ticket At least";
             }
             return View(party);
         }

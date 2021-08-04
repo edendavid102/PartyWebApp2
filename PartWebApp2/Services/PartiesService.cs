@@ -90,9 +90,11 @@ namespace PartWebApp2.Services
                 if (isPerformerExistInDb)
                 {
                     addExistingPerformerToParty(party, existingPerformer);
-                } else
+                }
+                else
                 {
-                    var newPerformer = new Performer {
+                    var newPerformer = new Performer
+                    {
                         SpotifyId = spotifyId,
                         parties = new List<Party>()
                     };
@@ -177,10 +179,6 @@ namespace PartWebApp2.Services
             }
         }
 
-        public int calcAvailableTickets(Party party)
-        {
-            return party.maxCapacity - party.ticketsPurchased;
-        }
 
         public string areaTypeToString(AreaType type)
         {
@@ -203,14 +201,52 @@ namespace PartWebApp2.Services
 
             return null;
         }
+        public bool calcAvailableTickets(int id, User user, int numOfTickets)
+        {
+            var party = _context.Party.FirstOrDefault(p => p.Id == id);
+            if (party != null)
+            {
+                int availebleTickets = party.maxCapacity - party.ticketsPurchased;
+                if (availebleTickets >= numOfTickets)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
         public void addTicketsCountToParty(int id, int numOfTickets, User user)
         {
             var currentParty = _context.Party.FirstOrDefault(p => p.Id == id);
-            if (calcAvailableTickets(currentParty) >= numOfTickets)
+            if (currentParty != null)
             {
-                currentParty.ticketsPurchased += numOfTickets;
-                currentParty.users.Add(user);
-                _context.Update(currentParty);
+                if (calcAvailableTickets(id, user, numOfTickets))
+                {
+                    if (currentParty.users == null)
+                    {
+                        currentParty.users = new List<User>();
+                    }
+                    if (user.parties == null)
+                    {
+                        user.parties = new List<Party>();
+                    }
+                    if (currentParty.users.Contains(user) || user.parties.Contains(currentParty))
+                    {
+                        currentParty.ticketsPurchased += numOfTickets;
+                    }
+                    else
+                    {
+                        if (!currentParty.users.Contains(user))
+                        {
+                            currentParty.users.Add(user);
+                        }
+                        if (!user.parties.Contains(currentParty))
+                        {
+                            user.parties.Add(currentParty);
+                        }
+                    }
+                }
             }
         }
 
