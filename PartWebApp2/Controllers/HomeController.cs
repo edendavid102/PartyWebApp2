@@ -27,6 +27,7 @@ namespace PartWebApp2.Controllers
         //[Authorize]
         public IActionResult Index()
         {
+
             HomePage homePage = new HomePage();            
             return View(_partiesService.getDataForHomePage(homePage));
         }
