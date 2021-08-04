@@ -8,13 +8,13 @@
 <head>
     <link rel="stylesheet" href="~/css/HomePage.css" />
 </head>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
     <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
         <h1>All Parties</h1>
         <h3>Time To Celabrate</h3>
         <form asp-action="findParty">
             <div class="input-group">
-                <input name="partyName" class="form-control text-center" placeholder="Search in your parties" />
+                <input name="partyName" class="form-control text-center" placeholder="Enter name of the party..." />
                 <span class="text-danger"></span>
                 <div class="input-group-btn">
                     <button type="submit" value="findParty" class="btn btn-danger">Search</button>
@@ -23,20 +23,51 @@
         </form>
     </div>
 
-    <div>
-        <form asp-action="MultipleSearch">
+    <div class="col-md-12">
+        <form asp-action="SearchByGenreClubArea">
             <div class="col-md-3">
-                <select name="genreId" class="form-control" asp-items="ViewBag.genreId"></select>
+                <option>Genre</option>
+                <select name="genreId" class="form-control text-center" asp-items="ViewBag.genreId"></select>
             </div>
             <div class="col-md-3">
-                <select name="areaId" class="form-control" asp-items="ViewBag.areaId"></select>
+                <option>Area</option>
+                <select name="areaId" class="form-control text-center" asp-items="ViewBag.areaId"></select>
             </div>
             <div class="col-md-3">
-                <select name="clubId" class="form-control" asp-items="ViewBag.clubId"></select>
+                <option>Club</option>
+                <select name="clubId" class="form-control text-center" asp-items="ViewBag.clubId"></select>
             </div>
-            <input type="submit" value="MultipleSearch" class="btn-btn-primary" />
+            <br />
+            <div>
+                <button type="submit" value="findParty" class="btn btn-danger">Search</button>
+            </div>
+
         </form>
     </div>
+    <br />
+    <br />
+    <br />
+    <div class="col-md-12">
+        <form asp-action="SearchByPriceDate">
+            <div class="col-md-3">
+                <input name="dateInput" class="form-control" type="date" />
+            </div>
+            <div class="col-md-3">
+                <input name="price" class="form-control" placeholder="Enter price" type="number" />
+            </div>
+            <div class="col-md-2">
+                <span class="text-danger"></span>
+                <div class="input-group-btn">
+                    <button type="submit" value="findParty" class="btn btn-danger">Search</button>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+
 
     <div class="col-md-12">
         <p class="col-md-10"></p>
