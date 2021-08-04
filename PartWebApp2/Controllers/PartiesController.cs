@@ -226,6 +226,9 @@ namespace PartWebApp2.Controllers
                 var artists = await _spotifyClientService.GetArtists(performersSpotifyIds);
                 ViewBag.artists = artists.ToArray();
             }
+            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
 
             return View(party);
         }
