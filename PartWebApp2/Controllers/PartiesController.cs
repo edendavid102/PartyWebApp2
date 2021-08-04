@@ -18,7 +18,7 @@ namespace PartWebApp2.Controllers
         private readonly PartyWebAppContext _context;
         private readonly PartiesService _partiesService;
         private readonly ISpotifyClientService _spotifyClientService;
-    public PartiesController(PartyWebAppContext context, PartiesService service, ISpotifyClientService spotifyClientService)
+        public PartiesController(PartyWebAppContext context, PartiesService service, ISpotifyClientService spotifyClientService)
         {
             _context = context;
             _partiesService = service;
@@ -52,7 +52,7 @@ namespace PartWebApp2.Controllers
             return currentUser;
         }
         // GET: Parties
-         [Authorize]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             ViewData["PageName"] = "Index";
@@ -132,6 +132,7 @@ namespace PartWebApp2.Controllers
         [Authorize]
         public async Task<IActionResult> MultipleSearchResult(int? genreId, int? clubId, int? areaId)
         {
+            initTypeUserToViewData(returnCurrentUser());
             var PartyWebAppContext = _context.Party.Include(p => p.genre)
                 .Include(p => p.club).Include(p => p.area)
                 .Where(p => p.genreId.Equals(genreId) &&
@@ -226,7 +227,7 @@ namespace PartWebApp2.Controllers
             ViewData["Genres"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
-           
+
             return View();
         }
 
@@ -250,8 +251,12 @@ namespace PartWebApp2.Controllers
             }
             return View(party);
         }
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Payment(int? id)
         {
+            initTypeUserToViewData(returnCurrentUser());
             if (id == null)
             {
                 return NotFound();
@@ -261,6 +266,13 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
+            //var party = await _context.Party
+            //    .Include(p => p.area)
+            //    .Include(p => p.club)
+            //    .Include(p => p.genre)
+            //    .Include(p => p.partyImage)
+            //    .Include(p => p.performers)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
 
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
@@ -271,16 +283,25 @@ namespace PartWebApp2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Payment(int partyId, int numOfTickets)
+        [Authorize]
+        public async Task<IActionResult> Payment(int id, int numOfTickets)
         {
-            var currentUserId = HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = _context.User.FirstOrDefault(u => u.Id == Int32.Parse(currentUserId));
-            _partiesService.addTicketsCountToParty(partyId, numOfTickets, currentUser);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(myParties));
+            initTypeUserToViewData(returnCurrentUser());
+            var party = _context.Party.FirstOrDefault(p => p.Id == id);
+            if (party == null)
+            {
+                return NotFound();
+            }
+            if (numOfTickets > 0)
+            {
+                _partiesService.addTicketsCountToParty(id, returnCurrentUser(), numOfTickets);
+                _context.Update(party);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(myParties));
+            }
+            return View(party);
         }
-
+                 
         [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -330,9 +351,9 @@ namespace PartWebApp2.Controllers
                             throw;
                         }
                     }
-                        return RedirectToAction(nameof(myParties));
-                    }
-                    ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
+                    return RedirectToAction(nameof(myParties));
+                }
+                ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
                 ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
                 ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
                 return View(party);

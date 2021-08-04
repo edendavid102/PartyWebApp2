@@ -1,8 +1,4 @@
-﻿//const { color } = require("d3");
-
-//const { path } = require("d3");
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $("#GenreStatsContainer").ready(function () {
         $.ajax({
             type: "GET",
@@ -111,7 +107,6 @@ function createD3BarChart(data, id) {
         .attr("width", x.rangeBand())
         .attr("y", data => y(data.number))
         .attr("height", data => (height - y(data.number)));
-
 }
 
 
