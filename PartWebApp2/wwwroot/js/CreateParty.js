@@ -4,12 +4,15 @@
         alert('No more performers allowed');
         return;
     }
-    $('#performersFieldContainer').append('<input required id="performer-name" onchange="getPerformerIdByName(this)"/>');
+    var inputElement = document.createElement("input")
+    inputElement.id = "performer-name-" + addedFieldCount;
+    inputElement.onchange = "getPerformerIdByName(this)";
+    $('#performersFieldContainer').append(inputElement);
 }
 function postToFacebook() {
     var facebookMessage = $('#facebookMessageInput').val();
     const FacebookPageId = "100168142240956";
-    const FacebookPageToken = "EAA3O6dvVFWYBACmtfz1ZC2qgZCk13qjjVgNvaC6mo4f1pnF3ZCMajQqYTZAIkdKZAXdk8tcpnPVxbEJ09WcbZBN1hRNOp1mZBK69uXhPJW7klq3B5A1SeQHZBE4ZC2VKe9utn4AKl6ZChG5J8mSdcMvEZBk3gLrQU3mTtKJiSf6COgXyTydFVZBnO83nHXVBUUmfMP03GUZB043iGksJu0n0PfZBfq";
+    const FacebookPageToken = "EAA3O6dvVFWYBAMFwlbfrcBwXMURph0ELaZA2rKZCOrZBUt6T6AFWMybMEI9UWAVY0IxNGCOBIlmcKfZAFNp4XNY58uDhJK8Yz4k20WsLOJlBepYikJZA5rUZCfjhSdCOMO0qdBlHCElSSbTM9ao9UNmNcKi8TtaWdaHY6HsDATOST8M2gGy4Xw";
     const FacebookApi = "https://graph.facebook.com/";
     const postReqUrl = FacebookApi + FacebookPageId + "/feed?message=" + facebookMessage + "&access_token=" + FacebookPageToken;
     if (facebookMessage) {
@@ -34,12 +37,13 @@ function getPerformerIdByName(item) {
             },
             success: function (result) {
                 if (result === 'NO_RESULT') {
-                    alert("No artist found with this name");
+                    item.value = ""
+                    alert("couldn't find artist");
                 }
                 else {
                     var inputElement = document.createElement("input")
                     inputElement.type = "hidden";
-                    inputElement.id = "performer-id";
+                    inputElement.id = "performer-id-" + item.id.split("-")[2];
                     inputElement.name = "performersId";
                     inputElement.value = result;
                     $('#performersFieldContainer').append(inputElement);
@@ -49,5 +53,11 @@ function getPerformerIdByName(item) {
                 alert(textStatus + " " + errorThrown);
             }
         });
+    } else if (queryParams.length === 0) {
+        var performerIdInputElementId = "#performer-id-" + item.id.split("-")[2];
+        if ($(performerIdInputElementId).length) {
+            console.log(performerIdInputElementId);
+            $(performerIdInputElementId).remove();
+        }
     }
 }

@@ -221,7 +221,7 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-            if (party.performers != null)
+            if (party.performers != null && party.performers.Any())
             {
                 List<string> performersSpotifyIds = party.performers.Select(performer => performer.SpotifyId).ToList();
                 var artists = await _spotifyClientService.GetArtists(performersSpotifyIds);
@@ -252,13 +252,17 @@ namespace PartWebApp2.Controllers
         [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> Create([Bind("Id,name,eventDate,minimalAge,startTime,genreId,areaId,clubId,ProducerId,maxCapacity,price,ticketsPurchased")] Party party, string imageUrl, List<string> performersId)
         {
+            bool isPerformersSubmitted = performersId != null && performersId.Any();
             if (ModelState.IsValid)
             {
                 party.ProducerId = findCurrentUserId();
 
                 party.ticketsPurchased = 0;
-                party.performers = new List<Performer>();
-                _partiesService.addPerformersToParty(party, performersId);
+                if (isPerformersSubmitted)
+                {
+                    party.performers = new List<Performer>();
+                    _partiesService.addPerformersToParty(party, performersId);
+                }
                 _partiesService.addImageToParty(party, imageUrl);
 
                 await _context.SaveChangesAsync();
