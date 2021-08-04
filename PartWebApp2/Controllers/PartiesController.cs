@@ -191,7 +191,7 @@ namespace PartWebApp2.Controllers
             {
                 partyWebAppContext.Where(p => p.users.Contains(returnCurrentUser()));
             }
-            return View("HomePage", await partyWebAppContext.ToListAsync());
+            return View("MyParties", await partyWebAppContext.ToListAsync());
         }
 
         [Authorize]
