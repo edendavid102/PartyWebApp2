@@ -46,7 +46,7 @@ namespace PartWebApp2
             }
             );
 
-            // אימות מבוסס מנגנון קוקי
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 options =>
                 {
