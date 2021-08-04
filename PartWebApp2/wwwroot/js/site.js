@@ -6,7 +6,6 @@
             contentType: "application/json",
             dataType: "json",
             success: data => {
-
                 createD3BarChart(data, "GenreStatsContainer");
             }
         });
@@ -48,22 +47,22 @@ function createD3BarChart(data, id) {
 
     var margin = { top: 20, right: 20, bottom: 100, left: 60 },
         width = 600 - margin.left - margin.right,
-        height = 280,
-        x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
-    y = d3.scale.linear().range([height, 0]);
-
+        height = 280;
+    var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.5);
+    var y = d3.scale.linear().range([height, 0]);
+ 
     //draw axis
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
 
-    var yAxis = d3.svg.axis()
+    var yAxis = d3.svg.axis().tickFormat(d3.format("d"))
         .scale(y)
         .orient("left")
         .ticks(dataToDisplay.length)
         .innerTickSize(-width)
         .outerTickSize(0)
-        .tickPadding(10)
+        .tickPadding(10);
 
     var svg = d3.select("#"+id)
         .append("svg")
@@ -82,16 +81,16 @@ function createD3BarChart(data, id) {
         .call(xAxis)
         .selectAll("text")
         .style("text-anchor", "middle")
-        .attr("dx", "-1.5em")
+        .attr("dx", "-2.5em")
         .attr("dy", "-.55em")
         .attr("y", 30)
-        .attr("transform", "rotate(-50)")
+        .attr("transform", "rotate(-40)")
         .style("stroke", "#69a3b2");
 
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
-        .append("text")
+        .selectAll("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 5)
         .attr("dy", "0.8em")
@@ -102,7 +101,7 @@ function createD3BarChart(data, id) {
         .data(dataToDisplay)
         .enter()
         .append("rect")
-        .style({ "stroke": "white", "fill": "white", "shape-rendering": "crispEdges" })
+        .style({ "fill": " #00ffea", "shape-rendering": "crispEdges" })
         .attr("x", data => x(data.genre))
         .attr("width", x.rangeBand())
         .attr("y", data => y(data.number))

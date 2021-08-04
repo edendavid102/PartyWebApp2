@@ -7,6 +7,7 @@ using PartWebApp2.Services;
 using PartWebApp2.Models;
 using System.Security.Claims;
 using PartWebApp2.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PartWebApp2.Controllers
 {
@@ -48,6 +49,8 @@ namespace PartWebApp2.Controllers
             return currentUser;
         }
 
+
+        [Authorize]
         public IActionResult Index()
         {
             initTypeUserToViewData(returnCurrentUser());

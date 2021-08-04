@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<PartWebApp2.Models.Party>
+﻿@model IEnumerable<PartWebApp2.Models.Party>
 
 @{
     ViewData["Title"] = "MyParties";
@@ -18,15 +18,7 @@
             </div>
         }
         <h1>My Parties</h1>
-        <form asp-action="FindParty">
-            <div class="input-group">
-                <input name="partyName" class="form-control text-center" placeholder="Search in your parties" />
-                <span class="text-danger"></span>
-                <div class="input-group-btn">
-                    <button type="submit" value="FindParty" class="btn btn-danger">Search</button>
-                </div>
-            </div>
-        </form>
+
     </div>
     <div id="portfolio" class="container-fluid text-center">
         @{ var col = "color1"; var i = 0;}
@@ -83,4 +75,4 @@
             }
         }
     </div>
-</body>*@
+</body>
