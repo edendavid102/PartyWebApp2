@@ -170,7 +170,7 @@ namespace PartWebApp2.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> myParties()
         {
             ViewData["PageName"] = "My Parties";

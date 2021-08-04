@@ -66,8 +66,10 @@ namespace PartWebApp2.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var currentUser = returnCurrentUser();
+            ViewData["userId"] = currentUser.Id;
             userTypesViewList();
-            initTypeUserToViewData(returnCurrentUser());
+            initTypeUserToViewData(currentUser);
             var result = (from o in _context.Party
                           group o by o.areaId into o
                           orderby o.Sum(c => c.areaId) descending
@@ -285,9 +287,15 @@ namespace PartWebApp2.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            User currentUser = returnCurrentUser();
+            if (currentUser.Id == id)
+            {
+                return AccessDenied();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -313,7 +321,7 @@ namespace PartWebApp2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !UserExists(user.Id))
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
