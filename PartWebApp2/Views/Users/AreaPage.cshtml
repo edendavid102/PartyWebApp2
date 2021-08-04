@@ -7,31 +7,38 @@
 @{ int i = 0; }
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
     <div id="portfolio" class="container-fluid text-center" style="margin-top: 60px;">
-        @foreach (var party in Model.Item1)
+        @if (Model.Item1.Count() != 0)
         {
-            <div class="container-fluid col-sm-4">
-                <div class="a-box">
-                    <div class="img-container">
-                        <div class="img-inner">
-                            <div class="inner-skew">
-                                <img src="@Model.Item2[i].imageUrl" />
+            @foreach (var party in Model.Item1)
+            {
+                <div class="container-fluid col-sm-4">
+                    <div class="a-box">
+                        <div class="img-container">
+                            <div class="img-inner">
+                                <div class="inner-skew">
+                                    <img src="@Model.Item2[i].imageUrl" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-container color2">
-                        <h3>
-                            @Model.Item1[i].name
-                        </h3>
-                        <h5>
-                            @Model.Item1[i].eventDate.ToShortDateString()
-                        </h5>
-                        <h5>
-                            + @Model.Item1[i].minimalAge
-                        </h5>
+                        <div class="text-container color2">
+                            <h3>
+                                @Model.Item1[i].name
+                            </h3>
+                            <h5>
+                                @Model.Item1[i].eventDate.ToShortDateString()
+                            </h5>
+                            <h5>
+                                + @Model.Item1[i].minimalAge
+                            </h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-            i++;
+                i++;
+            }
+        }
+        else
+        {
+            <img src="https://image.shutterstock.com/image-vector/not-available-watermark-stamp-text-260nw-522778633.jpg" />
         }
     </div>
 </body>

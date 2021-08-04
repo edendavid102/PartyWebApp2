@@ -208,6 +208,16 @@
         input:focus:-ms-input-placeholder {
             color: transparent
         }
+
+        .paint-canvas {
+            border: 1px black solid;
+            display: block;
+            margin: 0rem;
+        }
+
+        .color-picker {
+            margin: 1rem 1rem 0 1rem;
+        }
     </style>
 </head>
 <body>
@@ -216,6 +226,7 @@
             <h2 style="font-size: 35px;">@Model.name Tickets</h2>
         </div>
         <form asp-action="Payment">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <span id="card-header">Count Of Ticket's:</span>
             <div class="row row-1">
                 <div class="col-2"> </div>
@@ -237,7 +248,59 @@
                 </div>
                 <div class="col-2"> <input type="text" placeholder="Exp. date"> </div>
                 <div class="col-2"> <input type="text" placeholder="CVV"> </div>
+
+                <h4>Please Signiture</h4>
+                <canvas class="js-paint  paint-canvas" width="500" height="150"></canvas>
+                <input hidden="hidden" type="color" class="js-color-picker  color-picker">
+                <input hidden="hidden" type="range" class="js-line-range" min="1" max="72" value="1">
             </div> <input class="btn d-flex mx-auto" type="submit" value="Confirm Payment" />
+
         </form>
     </div>
 </body>
+<script>
+    const paintCanvas = document.querySelector('.js-paint');
+    const context = paintCanvas.getContext('2d');
+    context.lineCap = 'round';
+
+    const colorPicker = document.querySelector('.js-color-picker');
+
+    colorPicker.addEventListener('change', event => {
+        context.strokeStyle = event.target.value;
+    });
+
+    const lineWidthRange = document.querySelector('.js-line-range');
+    const lineWidthLabel = document.querySelector('.js-range-value');
+
+    lineWidthRange.addEventListener('input', event => {
+        const width = event.target.value;
+        lineWidthLabel.innerHTML = width;
+        context.lineWidth = width;
+    });
+
+    let x = 0, y = 0;
+    let isMouseDown = false;
+
+    const stopDrawing = () => { isMouseDown = false; }
+    const startDrawing = event => {
+        isMouseDown = true;
+        [x, y] = [event.offsetX, event.offsetY];
+    }
+    const drawLine = event => {
+        if (isMouseDown) {
+            const newX = event.offsetX;
+            const newY = event.offsetY;
+            context.beginPath();
+            context.moveTo(x, y);
+            context.lineTo(newX, newY);
+            context.stroke();
+            x = newX;
+            y = newY;
+        }
+    }
+
+    paintCanvas.addEventListener('mousedown', startDrawing);
+    paintCanvas.addEventListener('mousemove', drawLine);
+    paintCanvas.addEventListener('mouseup', stopDrawing);
+    paintCanvas.addEventListener('mouseout', stopDrawing);
+</script>

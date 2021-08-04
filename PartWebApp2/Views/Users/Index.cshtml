@@ -3,10 +3,8 @@
     ViewData["Title"] = "Index";
     Layout = "_HomeLayout";
 }
-
 <head>
     <style>
-
         *,
         *::before,
         *::after {
@@ -38,7 +36,6 @@
         }
 
         th {
-            /*padding: 1rem 2rem;*/
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.1rem;
@@ -78,11 +75,9 @@
             color: black;
         }
 
-
         .amount {
             text-align: right;
         }
-
 
         tr:nth-child(even) {
             background-color: #f4f6fb;
@@ -90,9 +85,6 @@
     </style>
 </head>
 <body>
-    <div>
-        <h1> Most Active Producer : @ViewBag.MostPopularArea With @ViewBag.CountOfPartiesInMostPopularArea Parties </h1>
-    </div>
     <table>
         <thead>
             <tr>

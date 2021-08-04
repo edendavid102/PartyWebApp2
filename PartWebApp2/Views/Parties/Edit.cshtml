@@ -21,6 +21,9 @@
             font-weight: 700;
             text-shadow: 5px 5px 0px #eb452b, 10px 10px 0px #efa032, 15px 15px 0px #46b59b, 20px 20px 0px #017e7f;
         }
+        .block-div {
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -28,37 +31,32 @@
     <div class="testbox">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ProducerId" />
-            <input type="hidden" asp-for="ticketsPurchased" />
-            <div class="form-group">
-                <div class="banner">
-                    <h1>Edit @Model.name</h1>
-                </div>
+            <div class="banner">
+                <h1>Edit @Model.name</h1>
             </div>
             <div class="form-group">
                 <div class="item col-md-12">
                     <p>Event's Name</p>
                     <input asp-for="name" />
                     <span asp-validation-for="name" class="text-danger"></span>
-                    <i class="fas"></i>
                 </div>
+                <i class="fas"></i>
             </div>
-            <div class="form-group">
+            <div class="form-group block-div">
                 <div class="item col-md-6">
                     Date Of Event
                     <input asp-for="eventDate" />
-                    <span asp-validation-for="eventDate" class="text-danger"></span>
                     <i class="fas"></i>
+                    <span asp-validation-for="eventDate" class="text-danger"></span>
                 </div>
-                <div class="item col-md-6">
+                <div class="item col-md-6 block-div">
                     Time Of Event
                     <input asp-for="startTime" />
                     <span asp-validation-for="startTime" class="text-danger"></span>
                     <i class="fas"></i>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group block-div">
                 <div class="item col-md-4">
                     Club
                     <select asp-for="clubId" asp-items="ViewBag.Clubs"></select>
@@ -69,31 +67,35 @@
                     <select asp-for="areaId" asp-items="ViewBag.Areas"></select>
                     <i class="fas"></i>
                 </div>
+
                 <div class="item col-md-4">
                     Genre
                     <select asp-for="genreId" asp-items="ViewBag.Genres"></select>
                     <i class="fas"></i>
                 </div>
             </div>
-            <div class="form-group item col-md-4">
-                Minimal Age
-                <input asp-for="minimalAge" />
-                <span asp-validation-for="minimalAge" class="text-danger"></span>
-                <i class="fas"></i>
+            <div class="form-group block-div">
+                <div class="item col-md-4">
+                    Minimal Age
+                    <input asp-for="minimalAge" />
+                    <span asp-validation-for="minimalAge" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+                <div class="item col-md-4">
+                    Price
+                    <input asp-for="price" type="number" />
+                    <span asp-validation-for="price" class="text-danger"></span>
+                    <i class="fas"></i>
+                </div>
+
+                <div class="item col-md-4">
+                    Max Capacity
+                    <input asp-for="maxCapacity" />
+                    <i class="fas"></i>
+                    <span asp-validation-for="maxCapacity" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group item col-md-4">
-                Price
-                <input asp-for="price" type="number" />
-                <span asp-validation-for="price" class="text-danger"></span>
-                <i class="fas"></i>
-            </div>
-            <div class="form-group item col-md-4">
-                Max Capacity
-                <input asp-for="maxCapacity" />
-                <span asp-validation-for="maxCapacity" class="text-danger"></span>
-                <i class="fas"></i>
-            </div>
-            <div class="form-group item col-md-12">
+            <div class="item col-md-12 block-div">
                 <div class="col-md-6">
                     <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-danger btn-lg btn-block">Cancel</a>
                 </div>
