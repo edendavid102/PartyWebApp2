@@ -31,8 +31,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (ViewBag.UserType != "Manager" && ViewBag.PageName == "Index")
                     {
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#about">About</a></li>
+                       // <li><a href="#services">Services</a></li>
+                        //<li><a href="#about">About</a></li>
                         <li><a href="#contact">Contact</a></li>
                     }
                     @if (Context.User != null && Context.User.Claims != null && Context.User.Claims.Count() > 0)
