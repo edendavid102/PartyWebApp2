@@ -33,6 +33,12 @@ namespace PartWebApp2.Controllers
         {
             return Int32.Parse(HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
         }
+        public User returnCurrentUser()
+        {
+            var currentUser = _context.User.FirstOrDefault(u => u.Id == findCurrentUserId());
+            initTypeUserToViewData(currentUser);
+            return currentUser;
+        }
         public void initTypeUserToViewData(User currentUser)
         {
             ViewData["UserFullName"] = currentUser.firstName + " " + currentUser.lastName;
@@ -49,17 +55,20 @@ namespace PartWebApp2.Controllers
                 ViewData["UserType"] = "Client";
             }
         }
-        public User returnCurrentUser()
+        public void userTypesViewList()
         {
-            var currentUser = _context.User.FirstOrDefault(u => u.Id == findCurrentUserId());
-            initTypeUserToViewData(currentUser);
-            return currentUser;
+            List<SelectListItem> TypesUser = new List<SelectListItem>();
+            TypesUser.Add(new SelectListItem() { Text = "Client", Value = "0" });
+            TypesUser.Add(new SelectListItem() { Text = "Producer", Value = "1" });
+            TypesUser.Add(new SelectListItem() { Text = "Admin", Value = "2" });
+            ViewData["TypesUser"] = TypesUser;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUser = returnCurrentUser();
             ViewData["userId"] = currentUser.Id;
+            userTypesViewList();
             initTypeUserToViewData(currentUser);
             var result = (from o in _context.Party
                           group o by o.areaId into o
@@ -109,12 +118,13 @@ namespace PartWebApp2.Controllers
                     select a;
 
             Area area = q.Include(a => a.Parties).FirstOrDefault();
+            List<Party> parties = new List<Party>();
             if (area != null)
             {
                 await _context.SaveChangesAsync();
+                parties = area.Parties;
+                ViewData["AreaName"] = _partiesService.areaTypeToString(area.Type);
             }
-
-            List<Party> parties = area.Parties;
             List<PartyImage> images = new List<PartyImage>();
             foreach (Party p in parties)
             {
@@ -122,7 +132,6 @@ namespace PartWebApp2.Controllers
                 images.Add(image);
             }
             ViewData["images"] = images;
-            ViewData["AreaName"] = _partiesService.areaTypeToString(area.Type);
             Tuple<List<Party>, List<PartyImage>> tuple = new Tuple<List<Party>, List<PartyImage>>(parties, images);
             return View(nameof(AreaPage), tuple);
         }
@@ -308,9 +317,6 @@ namespace PartWebApp2.Controllers
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
@@ -326,15 +332,9 @@ namespace PartWebApp2.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            List<SelectListItem> TypesUser = new List<SelectListItem>();
-            TypesUser.Add(new SelectListItem() { Text = "Client", Value = "0" });
-            TypesUser.Add(new SelectListItem() { Text = "Producer", Value = "1" });
-            TypesUser.Add(new SelectListItem() { Text = "Admin", Value = "2" });
-
-            ViewData["TypesUser"] = TypesUser;
-
+            userTypesViewList();
             initTypeUserToViewData(returnCurrentUser());
-           
+
             if (id == null)
             {
                 return NotFound();
@@ -348,9 +348,6 @@ namespace PartWebApp2.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)

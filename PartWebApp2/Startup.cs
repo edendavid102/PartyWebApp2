@@ -37,11 +37,9 @@ namespace PartWebApp2
             services.AddTransient<ISpotifyClientService, SpotifyClientService>();
             services.AddTransient<IManageService, ManagerService>();
 
-            //services.AddTransient<IFacebookService, FacebookService>();
-
-            services.AddSession(options => 
+            services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(10); 
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
 
             }
             );
@@ -71,7 +69,7 @@ namespace PartWebApp2
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseSession(); 
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
