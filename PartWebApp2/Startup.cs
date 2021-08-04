@@ -37,7 +37,7 @@ namespace PartWebApp2
             services.AddTransient<ISpotifyClientService, SpotifyClientService>();
             services.AddTransient<IManageService, ManagerService>();
 
-            services.AddTransient<IFacebookService, FacebookService>();
+            //services.AddTransient<IFacebookService, FacebookService>();
 
             services.AddSession(options => 
             {

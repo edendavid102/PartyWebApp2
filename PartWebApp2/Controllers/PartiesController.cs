@@ -122,19 +122,19 @@ namespace PartWebApp2.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult MultipleSearch(int? genreId, int? clubId, int? areaId)
+        public IActionResult SearchByGenreClubArea(int? genreId, int? clubId, int? areaId)
         {
-            return RedirectToAction(nameof(MultipleSearchResult), new { genreId = genreId, clubId = clubId, areaId = areaId });
+            return RedirectToAction(nameof(SearchByGenreClubAreaResult), new { genreId = genreId, clubId = clubId, areaId = areaId });
         }
 
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> MultipleSearchResult(int? genreId, int? clubId, int? areaId)
+        public async Task<IActionResult> SearchByGenreClubAreaResult(int? genreId, int? clubId, int? areaId)
         {
             var PartyWebAppContext = _context.Party.Include(p => p.genre)
-                .Include(p => p.club).Include(p => p.area)
-                .Where(p => p.genreId.Equals(genreId) &&
+                .Include(p => p.club).Include(p => p.area).Include(p => p.partyImage)
+                .Where(p => p.genreId.Equals(genreId) && 
                 p.clubId.Equals(clubId) && p.areaId.Equals(areaId));
 
             ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type", genreId);
@@ -144,18 +144,30 @@ namespace PartWebApp2.Controllers
         }
 
 
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> findPartyInMyParties(string partyName)
+        public IActionResult SearchByPriceDate(double? price, DateTime dateInput)
         {
-            initTypeUserToViewData(returnCurrentUser());
-            var partyWebAppContext = _context.Party.Include(p => p.area)
-                .Include(p => p.club)
-                .Include(p => p.genre)
-                .Include(p => p.partyImage)
-                .Include(p => p.performers).Where(p => p.ProducerId.Equals(findCurrentUserId()));
-
-            return View("Index", await partyWebAppContext.ToListAsync());
+            return RedirectToAction(nameof(SearchByPriceDateResult), new { price = price, dateInput = dateInput });
         }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SearchByPriceDateResult(double? price, DateTime dateInput)
+        {
+            var PartyWebAppContext = _context.Party.Include(p => p.genre)
+               .Include(p => p.area).Include(p => p.partyImage)
+                .Where(p => p.price <= price && p.eventDate.Year.Equals(dateInput.Year)
+                && p.eventDate.Month.Equals(dateInput.Month));
+
+            
+            ViewData["genreId"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["clubId"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["areaId"] = new SelectList(_context.Set<Area>(), "Id", "Type");
+            return View("HomePage", await PartyWebAppContext.ToListAsync());
+        }
+
 
         [Authorize]
         public async Task<IActionResult> myParties()
@@ -179,7 +191,7 @@ namespace PartWebApp2.Controllers
             {
                 partyWebAppContext.Where(p => p.users.Contains(returnCurrentUser()));
             }
-            return View("HomePage", await partyWebAppContext.ToListAsync());
+            return View("MyParties", await partyWebAppContext.ToListAsync());
         }
 
         [Authorize]
