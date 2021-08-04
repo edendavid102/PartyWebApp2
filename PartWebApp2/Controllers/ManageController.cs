@@ -21,22 +21,24 @@ namespace PartWebApp2.Controllers
             _context= context;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             ViewData["PageName"] = "Index";
             //initTypeUserToViewData(returnCurrentUser()); - איך לגשת לזה
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         public string GenreStatistics()
         {
             return _manageService.GetPartiesInGenre();
         }
+        [Authorize(Roles = "Admin")]
         public string ClubStatistics()
         {
             return _manageService.GetPartiesInClub();
         }
+        [Authorize(Roles = "Admin")]
         public string AreaStatistics()
         {
             return _manageService.GetPartiesInArea();

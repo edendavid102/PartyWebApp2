@@ -128,7 +128,7 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @if (item.Type != UserType.Admin)
+                    @if (item.Type != UserType.Admin && item.Id != ViewBag.userId)
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">| Edit |</a>
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
