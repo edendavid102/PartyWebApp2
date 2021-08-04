@@ -7,18 +7,25 @@
 
 <head>
     <link rel="stylesheet" href="~/css/HomePage.css" />
+    <style>
+        .btn {
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
     <div id="portfolio" class="jumbotron text-center" data-target=".navbar">
+        <h1>My Parties</h1>
         @if (ViewBag.UserType != "Client")
         {
-            <div class="col-2">
+            <div class="mr-auto col-12 " style="display: flex;">
+                <div class="col-4"></div>
                 <a asp-action="Create" style="text-decoration: none;"
                    class="button button--moema button--text-thick button--text-upper button--size-s">Add New Party</a>
+                <div class="col-4"></div>
             </div>
         }
-        <h1>My Parties</h1>
-
     </div>
     <div id="portfolio" class="container-fluid text-center">
         @{ var col = "color1"; var i = 0;}
@@ -46,7 +53,7 @@
                         <a asp-action="Details" asp-route-id="@item.Id">View More</a>
                         @if (ViewBag.UserType != "Client")
                         {
-                            <a asp-action="Edit" asp-route-id="@item.Id">| Edit |</a> 
+                            <a asp-action="Edit" asp-route-id="@item.Id">| Edit |</a>
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         }
                     </div>

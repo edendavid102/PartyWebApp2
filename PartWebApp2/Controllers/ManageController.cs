@@ -59,17 +59,14 @@ namespace PartWebApp2.Controllers
 
         public string GenreStatistics()
         {
-            initTypeUserToViewData(returnCurrentUser());
             return _manageService.GetPartiesInGenre();
         }
         public string ClubStatistics()
         {
-            initTypeUserToViewData(returnCurrentUser());
             return _manageService.GetPartiesInClub();
         }
         public string AreaStatistics()
         {
-            initTypeUserToViewData(returnCurrentUser());
             return _manageService.GetPartiesInArea();
         }
     }

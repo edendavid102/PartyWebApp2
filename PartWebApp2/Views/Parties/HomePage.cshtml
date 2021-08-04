@@ -25,7 +25,6 @@
             </div>
         </form>
     </div>
-
     <div class="col-md-12">
         <form asp-action="SearchByGenreClubArea">
             <div class="col-md-3">
@@ -69,10 +68,6 @@
         </form>
     </div>
 
-
-
-
- 
     <div id="portfolio" class="container-fluid text-center">
         @{ var col = "color1"; var i = 0;}
         @foreach (var item in Model)
@@ -96,7 +91,7 @@
                         <h5>
                             @Html.DisplayFor(modelItem => item.genre.Type)
                         </h5>
-                        <a asp-action="Details" asp-route-id="@item.Id">View More</a>                    
+                        <a asp-action="Details" asp-route-id="@item.Id">View More</a>
                     </div>
                 </div>
             </div>

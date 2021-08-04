@@ -14,7 +14,7 @@
         <h1> Welcome</h1>
         <h3>Time To Celabrate</h3>
     </div>
-    <div id="portfolio" class="container-fluid text-center">
+    <div id="portfolio" class="text-center">
         <h1>Top 5 Best Seller</h1>
         <div class="carusel-body">
             <input type="radio" name="position" checked />
@@ -47,7 +47,9 @@
                                     <h5>
                                         @Html.DisplayFor(modelItem => item.area.Type)
                                     </h5>
-                                    <a asp-action="Details" asp-route-id="@item.Id">View More</a>
+                                    <h5>
+                                        @Html.DisplayFor(modelItem => item.price) ILS
+                                    </h5>
                                 </div>
                             </div>
                         </div>

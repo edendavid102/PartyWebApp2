@@ -389,6 +389,7 @@ namespace PartWebApp2.Controllers
         [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> Delete(int? id)
         {
+            initTypeUserToViewData(returnCurrentUser());
             if (id == null)
             {
                 return NotFound();
