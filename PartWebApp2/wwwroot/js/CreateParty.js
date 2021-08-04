@@ -4,7 +4,10 @@
         alert('No more performers allowed');
         return;
     }
-    $('#performersFieldContainer').append('<input required id="performer-name" onchange="getPerformerIdByName(this)"/>');
+    var inputElement = document.createElement("input")
+    inputElement.id = "performer-name-" + addedFieldCount;
+    inputElement.onchange = "getPerformerIdByName(this)";
+    $('#performersFieldContainer').append(inputElement);
 }
 function postToFacebook() {
     var facebookMessage = $('#facebookMessageInput').val();
@@ -34,12 +37,13 @@ function getPerformerIdByName(item) {
             },
             success: function (result) {
                 if (result === 'NO_RESULT') {
-                    alert("No artist found with this name");
+                    item.value = ""
+                    alert("couldn't find artist");
                 }
                 else {
                     var inputElement = document.createElement("input")
                     inputElement.type = "hidden";
-                    inputElement.id = "performer-id";
+                    inputElement.id = "performer-id-" + item.id.split("-")[2];
                     inputElement.name = "performersId";
                     inputElement.value = result;
                     $('#performersFieldContainer').append(inputElement);
@@ -49,5 +53,11 @@ function getPerformerIdByName(item) {
                 alert(textStatus + " " + errorThrown);
             }
         });
+    } else if (queryParams.length === 0) {
+        var performerIdInputElementId = "#performer-id-" + item.id.split("-")[2];
+        if ($(performerIdInputElementId).length) {
+            console.log(performerIdInputElementId);
+            $(performerIdInputElementId).remove();
+        }
     }
 }

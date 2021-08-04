@@ -34,27 +34,30 @@
         <p>@Html.DisplayFor(model => model.eventDate)</p>
     </div>
     <div id="portfolio" class="container-fluid text-center">
-        <h2>Lineup</h2><br>
-        <h4>The best of the @Html.DisplayFor(model => model.genre.Type) genre</h4>
+        @if(ViewBag.artists != null)
+        {
+            <h2>Lineup</h2><br>
+            <h4>The best of the @Html.DisplayFor(model => model.genre.Type) genre</h4>
+        }
         <div class="row text-center slideanim">
-            @for (var i = 0; i < ViewBag.artists.Length; i++)
+            @for (var i = 0; i < ViewBag.artists?.Length; i++)
             {
                 var artist = ViewBag.artists[i];
                 var artistPlayer = "https://open.spotify.com/embed/artist/" + artist.Id + "?theme=0";
-                    <div class="col-sm-5 col-md-3">
-                        <div class="thumbnail">
-                            <img src=@artist.Images[0].Url alt=@artist.Name width="400" height="300" style="margin-bottom:-25px" />
-                            <div class="caption">
-                                <iframe src=@artistPlayer
-                                        width="317"
-                                        height="80"
-                                        frameBorder="0"
-                                        allowtransparency="true"
-                                        allow="encrypted-media">
-                                </iframe>
-                            </div>
+                <div class="col-sm-5 col-md-3">
+                    <div class="thumbnail">
+                        <img src=@artist.Images[0].Url alt=@artist.Name width="400" height="300" style="margin-bottom:-25px" />
+                        <div class="caption">
+                            <iframe src=@artistPlayer
+                                    width="317"
+                                    height="80"
+                                    frameBorder="0"
+                                    allowtransparency="true"
+                                    allow="encrypted-media">
+                            </iframe>
                         </div>
                     </div>
+                </div>
             }
         </div><br>
     </div>
