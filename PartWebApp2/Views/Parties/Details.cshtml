@@ -33,9 +33,9 @@
     <h1>@Html.DisplayFor(model => model.name)</h1>
     <h3>@Html.DisplayFor(model => model.eventDate)</h3>
     <h3>@Model.price ILS</h3>
-    <a class="btn btn-success btn-lg buytickets" asp-*action="Payment" asp-route-id="@Model.Id">Buy Tickets!</a>
+    <a class="btn btn-success btn-lg buytickets" asp-action="Payment" asp-route-id="@Model.Id">Buy Tickets!</a>
 </div>
-<div class="jumbotron text-center *image-background"></div>
+<div class="jumbotron text-center image-background"></div>
 <div id="portfolio" class="container-fluid text-center">
     @if (ViewBag.artists != null)
     {

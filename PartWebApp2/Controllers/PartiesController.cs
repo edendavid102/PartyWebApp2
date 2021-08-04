@@ -268,6 +268,10 @@ namespace PartWebApp2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), "Id", "Type");
+            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), "Id", "Name");
+            ViewData["Areas"] = new SelectList(_context.Set<Area>(), "Id", "Type");
+
             return View(party);
         }
 
