@@ -338,14 +338,13 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-            if(party.ProducerId != returnCurrentUser().Id)
-            {
-                return RedirectToAction("AccessDenied", "Users");
-            }
-
             ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
             ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
             ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
+            if (party.ProducerId != returnCurrentUser().Id)
+            {
+                return RedirectToAction("AccessDenied", "Users");
+            }
 
             return View(party);
         }
@@ -355,40 +354,33 @@ namespace PartWebApp2.Controllers
         [Authorize(Roles = "Admin, producer")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,name,eventDate,minimalAge,startTime,genreId,areaId,clubId,ProducerId,maxCapacity,price,ticketsPurchased")] Party party)
         {
+            ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
+            ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
+            ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
             if (id != party.Id)
             {
                 return NotFound();
             }
-            if (returnCurrentUser().Id == party.ProducerId || returnCurrentUser().Type == UserType.Admin)
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    try
-                    {
-                        _context.Update(party);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!PartyExists(party.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(MyParties));
+                    _context.Update(party);
+                    await _context.SaveChangesAsync();
                 }
-                ViewData["Areas"] = new SelectList(_context.Set<Area>(), nameof(Area.Id), nameof(Area.Type));
-                ViewData["Clubs"] = new SelectList(_context.Set<Club>(), nameof(Club.Id), nameof(Club.Name));
-                ViewData["Genres"] = new SelectList(_context.Set<Genre>(), nameof(Genre.Id), nameof(Genre.Type));
-                return View(party);
-            }
-            else
-            {
-                ViewData["Error"] = "You Cant Edit this Party, its not yours!";
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PartyExists(party.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(MyParties));
             }
             return View(party);
         }

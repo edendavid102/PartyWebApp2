@@ -4,10 +4,7 @@
         alert('No more performers allowed');
         return;
     }
-    var inputElement = document.createElement("input")
-    inputElement.id = "performer-name-" + addedFieldCount;
-    inputElement.onchange = "getPerformerIdByName(this)";
-    $('#performersFieldContainer').append(inputElement);
+    $('#performersFieldContainer').append("<input id=performer-name-" + addedFieldCount + " onchange=getPerformerIdByName(this) />");
 }
 function postToFacebook() {
     var facebookMessage = $('#facebookMessageInput').val();
