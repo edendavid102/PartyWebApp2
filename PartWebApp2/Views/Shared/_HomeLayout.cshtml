@@ -29,7 +29,7 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    @if (ViewBag.UserType != "Manager" && ViewBag.PageName == "Index")
+                    @if (Context.User.Claims == null || Context.User.Claims.Count() == 0)
                     {
                         <li><a href="#services">Services</a></li>
                         <li><a href="#about">About</a></li>
@@ -61,17 +61,14 @@
                             <li>
                                 <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties">My Events</a>
                             </li>
+
                         }
                         <li>
                             <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="HomePage">All Events</a>
                         </li>
                         <li>
-                            <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Parties" asp-action="MyParties">My Events</a>
-                        </li>
-                        <li>
                             <a class="nav navbar-nav navbar-right" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                         </li>
-
                     }
                     else
                     {

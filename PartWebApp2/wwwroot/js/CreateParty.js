@@ -12,7 +12,7 @@
 function postToFacebook() {
     var facebookMessage = $('#facebookMessageInput').val();
     const FacebookPageId = "100168142240956";
-    const FacebookPageToken = "EAA3O6dvVFWYBAMFwlbfrcBwXMURph0ELaZA2rKZCOrZBUt6T6AFWMybMEI9UWAVY0IxNGCOBIlmcKfZAFNp4XNY58uDhJK8Yz4k20WsLOJlBepYikJZA5rUZCfjhSdCOMO0qdBlHCElSSbTM9ao9UNmNcKi8TtaWdaHY6HsDATOST8M2gGy4Xw";
+    const FacebookPageToken = "EAA3O6dvVFWYBAPHMDYirE5bZB7BsPuNNpofIFNtXovEK5asgrBljgOWxlytHL5ZBRjjXxjZBO0rtlRrUBQSFoLXlPczHNHP7AiZAq2K9ZBogmgXh2uZBnedScTSTTZB9g6l366ow2dCtJn5J9y9mdScuNJHTmwxfAHQURpazts73rHPjbLwBo7ZBMKMZCh0vS1JEqX2X5sPZBZCEAZDZD";
     const FacebookApi = "https://graph.facebook.com/";
     const postReqUrl = FacebookApi + FacebookPageId + "/feed?message=" + facebookMessage + "&access_token=" + FacebookPageToken;
     if (facebookMessage) {

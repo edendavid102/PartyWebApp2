@@ -69,6 +69,7 @@ namespace PartWebApp2.Controllers
             var currentUser = returnCurrentUser();
             ViewData["userId"] = currentUser.Id;
             userTypesViewList();
+
             initTypeUserToViewData(currentUser);
             var result = (from o in _context.Party
                           group o by o.areaId into o
@@ -291,10 +292,9 @@ namespace PartWebApp2.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            User currentUser = returnCurrentUser();
-            if (currentUser.Id == id)
+            if (returnCurrentUser().Id == id)
             {
-                return AccessDenied();
+                return View("AccessDenied");
             }
             if (id == null)
             {
@@ -311,25 +311,8 @@ namespace PartWebApp2.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
-        {
-            if (ModelState.IsValid && !UserExists(user.Id))
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             userTypesViewList();
@@ -345,11 +328,19 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                if (user.Type == UserType.Admin)
+                {
+                   return View("AccessDenied");
+                }
+            }
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,firstName,lastName,password,email,birthDate,Type")] User user)
         {
             initTypeUserToViewData(returnCurrentUser());
@@ -357,7 +348,6 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -381,7 +371,7 @@ namespace PartWebApp2.Controllers
             return View(user);
         }
 
-        // GET: Users/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -395,13 +385,17 @@ namespace PartWebApp2.Controllers
             {
                 return NotFound();
             }
-
+            if(user.Type == UserType.Admin)
+            {
+                return View("AccessDenied");
+            }
             return View(user);
         }
 
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.User.FindAsync(id);

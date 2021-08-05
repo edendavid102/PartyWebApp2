@@ -201,9 +201,8 @@ namespace PartWebApp2.Services
 
             return null;
         }
-        public bool calcAvailableTickets(int id, User user, int numOfTickets)
+        public bool isAvailableTickets(Party party, User user, int numOfTickets)
         {
-            var party = _context.Party.FirstOrDefault(p => p.Id == id);
             if (party != null)
             {
                 int availebleTickets = party.maxCapacity - party.ticketsPurchased;
@@ -216,12 +215,11 @@ namespace PartWebApp2.Services
             return false;
         }
 
-        public void addTicketsCountToParty(int id, int numOfTickets, User user)
+        public Party addTicketsCountToParty(Party currentParty, int numOfTickets, User user)
         {
-            var currentParty = _context.Party.FirstOrDefault(p => p.Id == id);
             if (currentParty != null)
             {
-                if (calcAvailableTickets(id, user, numOfTickets))
+                if (isAvailableTickets(currentParty, user, numOfTickets))
                 {
                     if (currentParty.users == null)
                     {
@@ -237,6 +235,7 @@ namespace PartWebApp2.Services
                     }
                     else
                     {
+                        currentParty.ticketsPurchased += numOfTickets;
                         if (!currentParty.users.Contains(user))
                         {
                             currentParty.users.Add(user);
@@ -248,6 +247,7 @@ namespace PartWebApp2.Services
                     }
                 }
             }
+            return currentParty;
         }
 
         public int CalculateAge(DateTime dateOfBirth)
